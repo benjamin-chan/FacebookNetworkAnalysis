@@ -1,6 +1,6 @@
 My Facebook network
 ===================
-Build off of the first assignment from the Coursera Social Network Analysis course. Below are part of the instructions from the first assignment from that course. After downloading my Facebook network data, I examine centrality and communities in the network using `r R.version$version.string` with the `igraph` package. I used the RStudio IDE with Knitr to generate this HTML file. This analysis was run on `r paste(Sys.time())`.
+Build off of the first assignment from the Coursera Social Network Analysis course. Below are part of the instructions from the first assignment from that course. After downloading my Facebook network data, I examine centrality and communities in the network using `r R.version$version.string` with the `igraph` package. I used the RStudio IDE with Knitr to generate this HTML file. This analysis was run on `r as.character(Sys.time())`.
 
 
 Getting Facebook network data
@@ -13,29 +13,23 @@ The following are instructions for downloading my own GML file is below. These i
 > * Choose which user data (e.g. "wall posts count") you'd like to include, for this assignment no additional data is necessary, but whatever you do download, you can visualize/analyze (profile age rank: oldest profile = highest value, declarative intensity (length of text in fields like activities, books, etc.)
 > * Save the .gml file and load it into Gephi using "File -> Open...".
 
-Load required packages.
-```{r LoadPackages}
-require(igraph, quietly=TRUE)
-require(ggplot2, quietly=TRUE)
-require(xtable, quietly=TRUE)
-require(RColorBrewer, quietly=TRUE)
-```
-
-My GML file was last downloaded on November 6, 2012.
+Read the GML file.
 ```{r ReadGraph}
-FB <- read.graph(file="ChanFacebook.gml", format="gml")
+require(igraph, quietly=TRUE)
+G <- read.graph(file="ChanFacebook.gml", format="gml")
 ```
-As of that date, there are `r vcount(FB)` nodes.
+My GML file was last modified on `r as.character(file.info("ChanFacebook.gml")$mtime)`. As of that date, there are `r vcount(G)` nodes.
 
 Create first name and initials vectors from names. I'll want to use these to label nodes when plotting the network.
 ```{r NodeLabels}
-listName <- strsplit(V(FB)$label, " ")
+listName <- strsplit(V(G)$label, " ")
 nameF <- sapply(listName, head, 1)
 nameL <- sapply(listName, tail, 1)
 initF <- substr(nameF, 1, 1)
-initL <- substr(nameL, 1, 2)
-initials <- paste(initF, initL, sep="")
+initL <- substr(nameL, 1, 1)
+initials <- paste0(initF, initL)
 label <- nameF
+head(label)
 ```
 
 
@@ -52,15 +46,16 @@ Here's a link to [Wikipedia](http://en.wikipedia.org/wiki/Centrality) for some b
 
 Calculate **degree** centrality. This ends up not being too useful. Degree is really just a measure of how connected someone is. In Facebook terms, it's who has the most friends within my network.
 ```{r Degree}
-deg <- degree(FB)
+deg <- degree(G)
 summary(deg)
 ```
 The median degree, or number of friends, was `r median(deg)`. The highest number of friends a person in my network has was `r max(deg)`.
 
 Even though I don't want to focus on degree centrality, let's see who are the most connected people in my network.
 ```{r HighDegree, results='asis'}
-lim <- sort(deg, decreasing=TRUE)[round(vcount(FB) * 0.05)]
-top <- data.frame("Name"=V(FB)$label, "Degree"=deg)
+require(xtable, quietly=TRUE)
+lim <- sort(deg, decreasing=TRUE)[round(vcount(G) * 0.05)]
+top <- data.frame("Name"=V(G)$label, "Degree"=deg)
 top <- subset(top, deg >= lim)
 top <- top[order(top$Degree, decreasing=TRUE),]
 print(xtable(top, digits=0), type="html", include.rownames=FALSE)
@@ -68,7 +63,7 @@ print(xtable(top, digits=0), type="html", include.rownames=FALSE)
 
 Calculate **closeness** centrality. Closeness is a measure of how many steps are required to access every other node. It's a measure of how close a node is to all the action. A person with high closeness, however, doesn't necessarily have to have very many friends or be in between relationship.
 ```{r Closeness}
-close <- closeness(FB)
+close <- closeness(G)
 summary(close)
 ```
 Again, I don't want to focus on closeness centrality since it's not really what I'm after in this analysis, so I won't say anything more about it.
@@ -77,17 +72,20 @@ Calculate **betweenness** centrality. I'm going to focus on betweenness since it
 
 Plot a histogram of betweenness scores. 
 ```{r Betweenness, fig.height=4}
-btwn <- betweenness(FB)
+require(ggplot2, quietly=TRUE)
+btwn <- betweenness(G)
 summary(btwn)
 qplot(btwn, binwidth=1000)
 ```
-The absolute value of the scores don't mean much. But their relative values tell the story. There are a number of people with extremely high betweenness scores. Who are these people? List the 5% of people with the highest betweeness scores. The labels will annotate the network visualization.
+The absolute value of the scores don't mean much. But their relative values tell the story. There are a number of people with extremely high betweenness scores. Who are these people? List the 25 of people with the highest betweeness scores.
 ```{r HighBetweenness, results='asis'}
-lim <- sort(btwn, decreasing=TRUE)[round(vcount(FB) * 0.05)]
-top <- data.frame("Name"=V(FB)$label, "Betweenness"=btwn)
-top <- subset(top, btwn >= lim)
+rank <- length(btwn) - rank(btwn) + 1
+top <- data.frame("Rank"=rank, "Name"=V(G)$label, "Betweenness"=btwn)
+lim <- sort(btwn, decreasing=TRUE)[round(vcount(G) * 0.05)]
+# top <- subset(top, btwn >= lim)
+top <- subset(top, rank <= 25)
 top <- top[order(top$Betweenness, decreasing=TRUE),]
-print(xtable(top, digits=0), type="html", include.rownames=FALSE)
+print(xtable(top, digits=0), type="html")
 ```
 
 Plot the association between degree centrality and betweenness centrality. See if there are any highly influential people (betweenness) who also have a high number of friends (degree).
@@ -98,7 +96,7 @@ ggplot(cntrl, aes(x=deg, y=btwn)) +
   geom_jitter(alpha=1/2) +
   scale_y_log10() +
   labs(x="Degree", y="Betweenness") +
-  annotate("text", label=paste("R-sq =", rsq), x=30, y=1)
+  annotate("text", label=paste("R-sq =", rsq), x=+Inf, y=1, hjust=1)
 ```
 
 
@@ -106,60 +104,111 @@ Communities
 -----------
 Find communities using the edge betweenness algorithm.
 ```{r FindCommunities}
-comm <- edge.betweenness.community(FB)
-sizes(comm)
-ncomm <- length(sizes(comm)[sizes(comm)>4])
+C <- edge.betweenness.community(G)
+sizes(C)
+commThreshold <- 6
+nComm <- length(sizes(C)[sizes(C) > commThreshold])
 ```
-There are `r ncomm` clearly large communities in my network.
+There are `r nComm` clearly large communities in my network. *Large* is defined as having more than `r commThreshold` people.
 
 
 Visualize the network
 ---------------------
-Label the nodes with high betweenness centrality.
-```{r SubsetLabels}
-topnodes <- nameF
-topnodes[btwn < lim] <- NA
-topnodes[topnodes == "Vancouver"] <- "Vancouver Marathon"
-```
+
 Scale the size of a node's plotting symbol according to its betweenness centrality score. Scaling is by percentile (50%, 75%, 90%, 95%, 99%).
 ```{r ScaleSymbol, fig.height=4}
 q <- quantile(btwn, probs=c(0, 0.5, 0.75, 0.9, 0.95, 0.99, 1))
 size <- cut(btwn, breaks=q, include.lowest=TRUE, dig.lab=5)
 summary(size)
-V(FB)$size <- unclass(size)
+V(G)$size <- unclass(size)
 ```
 
-Plot the network and color-code the communities.
-```{r NetworkVisualization, fig.height=15, fig.width=15}
-id <- communities(comm)[1:ncomm]
-palette <- brewer.pal(ncomm + 1, "Set1")
-node.color <- c(palette[1:ncomm], rep(palette[ncomm + 1], max(comm$membership) - ncomm))
-plot(comm, FB, main="Chan's Facebook network", 
-     vertex.label=topnodes, 
-     vertex.label.color="black", 
-     vertex.label.dist=0.5, 
-     vertex.label.family="sans", 
-     vertex.frame.color="gray",
-     colbar=node.color,
-     mark.groups=id, 
-     mark.col=NA,
-     edge.color=c("gray", "red")[crossing(comm, FB)+1]
-     )
+Label the nodes with the top betweenness centrality within each community. This will help make sense of who are the important links between each community.
+```{r SubsetLabels}
+labNode <- nameF
+labNode[labNode == "Marc"] <- paste(labNode[labNode == "Marc"], initL[labNode == "Marc"])  # Since there's 2 Marcs, paste their last initial to the label
+rankWithin <- ave(btwn, C$membership, FUN=function(x) length(x) - rank(x) + 1)
+pctWithin <- 7
+topWithin <- round(pctWithin / 100 * sizes(C))
+message(sprintf("The top %3.1f%% within each community leads to labelling %2.0f nodes.", pctWithin, sum(topWithin)))
+# Need to find a more elegant way to do this
+isLabelled1 <- C$membership == 1 & rankWithin <= topWithin[1]
+isLabelled2 <- C$membership == 2 & rankWithin <= topWithin[2]
+isLabelled3 <- C$membership == 3 & rankWithin <= topWithin[3]
+isLabelled4 <- C$membership == 4 & rankWithin <= topWithin[4]
+isLabelled5 <- C$membership == 5 & rankWithin <= topWithin[5]
+isLabelled6 <- C$membership == 6 & rankWithin <= topWithin[6]
+isLabelled7 <- C$membership == 7 & rankWithin <= topWithin[7]
+isLabelled <- isLabelled1 | isLabelled2 | isLabelled3 | isLabelled4 | isLabelled5 | isLabelled6 | isLabelled7
+labNode[!isLabelled] <- NA
+# labNode[C$membership != 5 & nameF != "Cat"] <- NA
 ```
+
+Create a function for `plot.igraph`.
+```{r FunctionPlot, tidy=FALSE}
+P <- function(vertex.label.cex=1) {
+  set.seed(seed)
+  plot(C, G,
+       vertex.label=labNode, 
+       vertex.label.color="black",
+       vertex.label.dist=1/4,
+       vertex.label.family="sans",
+       vertex.label.cex=vertex.label.cex, 
+       vertex.frame.color=NA,
+       colbar=node.color,
+       mark.groups=NA, 
+       mark.col=NA,
+       mark.border=palette,
+       edge.color=c("gray", "red")[crossing(C, G)+1],
+       edge.width=1/2
+       )
+}
+```
+
+Show low resolution plot for HTML file. Set the random number seed so when a high resolution version is created, it will have the same layout as this version.
+```{r NetworkVisualizationLowRes, dpi=72, fig.height=12, fig.width=12}
+id <- communities(C)[1:nComm]
+require(RColorBrewer, quietly=TRUE)
+palette <- brewer.pal(nComm + 1, "Set1")
+node.color <- c(palette[1:nComm], rep(palette[nComm + 1], max(C$membership) - nComm))
+seed <- Sys.time()
+P(vertex.label.cex=1)
+```
+Create high resolution PNG file for importing into presentations.
+```{r NetworkVisualizationHiRes, dpi=600, fig.height=12, fig.width=12, fig.show='hide'}
+P(vertex.label.cex=1/2)
+```
+
 Just eyeballing these communities, here's what I'm seeing:
-* The blue community is a core group of friends
+* The green community is a core group of friends
   * This is a diverse group, reflecting the many ways I'm connected to them
   * One of the subgroups that's connected to the rest of the blue community through Cat isn't really a group of friends; they're folks on Cat's side of the family
 * The purple community is [Union High School](https://www.facebook.com/pages/Union-High-School/127917213038)
   * Within the Union community, the smaller teacher subgroup is apparent and distinct from the larger student subgroup
   * There are a few [Mountain View](https://www.facebook.com/GoThunder.org) students in this community who are connected to Union people
-  * The only connection between the Union community and the rest of my network is through Erin; without Erin, my Union community would be totally separated from the rest of my network
-* The green community is running friends, including [Marathon Maniacs](http://www.marathonmaniacs.com/), ultra friends, and races
-  * My 2011 Hood to Coast team is quite far away from the bulk of my running community; in fact, they are more closely aligned with my core friend community, the reason I got connected to that Hood to Coast team
+  * The only connections between the Union community and the rest of my network is through Erin and Heather; without either, my Union community would be totally separated from the rest of my network
+* The blue community is running friends, including [Marathon Maniacs](http://www.marathonmaniacs.com/), Trail Factor, Animal Athletics, and BananaSluggers
 * The brown community is the [Concordia MATE](http://www.cu-portland.edu/coe/graduate/mat/) cohort
 * The red community is family
 * The orange community is a secondary group of Portland friends which have ties to the OHSU BMU
 * The yellow community is the OHSU BICC group
+  * 2 subgroups are the EPC and DMICE
 * There are a few people who don't fit in with a larger community within my network (pink nodes)
 
 It's obvious from the plot and the betweenness scores that Cat and Erin are crucial bridges tying a few large communities together.
+
+Create interactive 3-D high resolution.
+```{r NetworkVisualization3D, tidy=FALSE}
+l <- layout.fruchterman.reingold(G, dim=3)
+rglplot(G,
+        layout=l,
+        vertex.label=labNode,
+        vertex.label.color="black",
+        vertex.label.dist=1/4,
+        vertex.label.family="sans",
+        vertex.label.cex=1/2, 
+        vertex.frame.color=NA,
+        edge.color=c("gray", "red")[crossing(C, G)+1],
+        edge.width=1/8
+        )
+```
