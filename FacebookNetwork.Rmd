@@ -1,5 +1,12 @@
-My Facebook network
-===================
+---
+title: "My Facebook network"
+author: "Benjamin Chan (https://www.facebook.com/benjamin.ks.chan)"
+output:
+  html_document:
+    keep_md: yes
+    toc: yes
+---
+  
 Build off of the first assignment from the Coursera Social Network Analysis course. Below are part of the instructions from the first assignment from that course. After downloading my Facebook network data, I examine centrality and communities in the network using `r R.version$version.string` with the `igraph` package. I used the RStudio IDE with Knitr to generate this HTML file. This analysis was run on `r as.character(Sys.time())`.
 
 
@@ -108,7 +115,7 @@ Find communities using the edge betweenness algorithm.
 C <- edge.betweenness.community(G)
 sizesOrdered <- sizes(C)[order(sizes(C), decreasing=TRUE)]
 sizesOrdered
-maxComm <- 10
+maxComm <- 11
 commThreshold <- sizesOrdered[maxComm]
 ```
 There are `r maxComm` clearly large communities in my network. *Large* is defined as having more than `r commThreshold` people.
@@ -153,18 +160,19 @@ isLabelled8  <- C$membership ==  8 & rankWithin <= topWithin[ 8]
 isLabelled9  <- C$membership ==  9 & rankWithin <= topWithin[ 9]
 isLabelled10 <- C$membership == 10 & rankWithin <= topWithin[10]
 isLabelled11 <- C$membership == 11 & rankWithin <= topWithin[11]
-isLabelled <- isLabelled1 | isLabelled2 | isLabelled3 | isLabelled4 | isLabelled5 | isLabelled6 | isLabelled7 | isLabelled8 | isLabelled9 | isLabelled10 | isLabelled11
+isLabelled12 <- C$membership == 12 & rankWithin <= topWithin[12]
+isLabelled <- isLabelled1 | isLabelled2 | isLabelled3 | isLabelled4 | isLabelled5 | isLabelled6 | isLabelled7 | isLabelled8 | isLabelled9 | isLabelled10 | isLabelled11 | isLabelled12
 labNode[!isLabelled] <- NA
 # labNode[C$membership != 5 & nameF != "Cat"] <- NA
 ```
 
 Create a function for `plot.igraph`.
 ```{r FunctionPlot, tidy=FALSE}
-P <- function(vertex.label.cex=1) {
+P <- function(vertex.label.cex=1, vertex.label.color="#0000007F") {
   set.seed(seed)
   plot(C, G,
        vertex.label=labNode, 
-       vertex.label.color="#0000007F",
+       vertex.label.color=vertex.label.color,
        vertex.label.dist=1/4,
        vertex.label.family="sans",
        vertex.label.cex=vertex.label.cex, 
@@ -183,7 +191,7 @@ Show low resolution plot for HTML file. Set the random number seed so when a hig
 ```{r NetworkVisualizationLowRes, dpi=72, fig.height=12, fig.width=12}
 id <- communities(C)[1:maxComm]
 require(RColorBrewer, quietly=TRUE)
-palette <- brewer.pal(maxComm + 1, "Spectral")
+palette <- c(brewer.pal(maxComm, "Spectral"), "gray")
 node.color <- c(palette[1:maxComm], rep(palette[maxComm + 1], max(C$membership) - maxComm))
 seed <- Sys.time()
 P(vertex.label.cex=1)
@@ -191,7 +199,9 @@ P(vertex.label.cex=1)
 
 Create high resolution PNG file for importing into presentations.
 ```{r NetworkVisualizationHiRes, dpi=600, fig.height=12, fig.width=12, fig.show='hide'}
-P(vertex.label.cex=1/2)
+png(filename="NetworkVisualizationHiRes.png", width=12, height=12, units="in", res=600)
+P(vertex.label.cex=1/2, vertex.label.color="#000000")
+dev.off()
 ```
 
 Create a data frame of the network.
@@ -201,25 +211,19 @@ D <- data.frame(name=paste(nameF, nameL), comm=C$membership, isLabelled, btwn, c
 D[order(D$comm, !D$isLabelled), ]
 ```
 
-**Need to update**
-
-Just eyeballing these communities, here's what I'm seeing:
-* The green community is a core group of friends
-  * This is a diverse group, reflecting the many ways I'm connected to them
-  * One of the subgroups that's connected to the rest of the blue community through Cat isn't really a group of friends; they're folks on Cat's side of the family
-* The purple community is [Union High School](https://www.facebook.com/pages/Union-High-School/127917213038)
-  * Within the Union community, the smaller teacher subgroup is apparent and distinct from the larger student subgroup
-  * There are a few [Mountain View](https://www.facebook.com/GoThunder.org) students in this community who are connected to Union people
-  * The only connections between the Union community and the rest of my network is through Erin and Heather; without either, my Union community would be totally separated from the rest of my network
-* The blue community is running friends, including [Marathon Maniacs](http://www.marathonmaniacs.com/), Trail Factor, Animal Athletics, and BananaSluggers
-* The brown community is the [Concordia MATE](http://www.cu-portland.edu/coe/graduate/mat/) cohort
-* The red community is family
-* The orange community is a secondary group of Portland friends which have ties to the OHSU BMU
-* The yellow community is the OHSU BICC group
-  * 2 subgroups are the EPC and DMICE
-* There are a few people who don't fit in with a larger community within my network (pink nodes)
-
-It's obvious from the plot and the betweenness scores that Cat and Erin are crucial bridges tying a few large communities together.
+* Community 1 is family and relatives.
+* Community 2 is [Marathon Maniacs](http://www.marathonmaniacs.com/).
+* Community 3 is trail runners, including Trail Factor, Animal Athletics, and BananaSluggers.
+* Community 4 is [Union High School](https://www.facebook.com/pages/Union-High-School/127917213038), mostly students with non-math teachers and staff. Some [Mountain View](https://www.facebook.com/GoThunder.org) students who are connected to Union people.
+* Community 5 is the [Union High School](https://www.facebook.com/pages/Union-High-School/127917213038) math teachers.
+* Community 6 is OHSU BICC.
+* Community 7 is my [Concordia MATE](http://www.cu-portland.edu/coe/graduate/mat/) cohort.
+* Community 8 is Cat's side of the family and her friends.
+* Community 9 is a secondary group of Portland friends.
+* Community 10 is a core group of Portland friends.
+* Community 11 is a secondary group of Portland friends that has connections to Community 9.
+* Community 12 is the *junk* community of people that don't fit in with a larger community within my network (gray nodes)
+* There are a number of key people that connect 2 or more communities.
 
 Create interactive 3-D high resolution.
 ```{r NetworkVisualization3D, tidy=FALSE, eval=FALSE}
