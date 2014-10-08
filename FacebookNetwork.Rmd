@@ -15,6 +15,7 @@ The following are instructions for downloading my own GML file is below. These i
 
 Read the GML file.
 ```{r ReadGraph}
+setwd("~/GitHub repositories/FacebookNetworkAnalysis")
 require(igraph, quietly=TRUE)
 G <- read.graph(file="ChanFacebook.gml", format="gml")
 ```
@@ -105,19 +106,28 @@ Communities
 Find communities using the edge betweenness algorithm.
 ```{r FindCommunities}
 C <- edge.betweenness.community(G)
-sizes(C)
-commThreshold <- 6
-nComm <- length(sizes(C)[sizes(C) > commThreshold])
+sizesOrdered <- sizes(C)[order(sizes(C), decreasing=TRUE)]
+sizesOrdered
+maxComm <- 10
+commThreshold <- sizesOrdered[maxComm]
 ```
-There are `r nComm` clearly large communities in my network. *Large* is defined as having more than `r commThreshold` people.
+There are `r maxComm` clearly large communities in my network. *Large* is defined as having more than `r commThreshold` people.
+
+Set the `r maxComm + 1` community as a *junk* community.
+
+```{r}
+C$membership[!(C$membership %in% as.numeric(names(sizesOrdered[1:maxComm])))] <- 999
+C$membership <- unclass(factor(C$membership))
+table(C$membership)
+```
 
 
 Visualize the network
 ---------------------
 
-Scale the size of a node's plotting symbol according to its betweenness centrality score. Scaling is by percentile (50%, 75%, 90%, 95%, 99%).
+Scale the size of a node's plotting symbol according to its betweenness centrality score. Scaling is by percentile (75%, 90%, 95%, 97.5%, 99%).
 ```{r ScaleSymbol, fig.height=4}
-q <- quantile(btwn, probs=c(0, 0.5, 0.75, 0.9, 0.95, 0.99, 1))
+q <- quantile(btwn, probs=c(0, 0.75, 0.9, 0.95, 0.975, 0.99, 1))
 size <- cut(btwn, breaks=q, include.lowest=TRUE, dig.lab=5)
 summary(size)
 V(G)$size <- unclass(size)
@@ -132,14 +142,18 @@ pctWithin <- 7
 topWithin <- round(pctWithin / 100 * sizes(C))
 message(sprintf("The top %3.1f%% within each community leads to labelling %2.0f nodes.", pctWithin, sum(topWithin)))
 # Need to find a more elegant way to do this
-isLabelled1 <- C$membership == 1 & rankWithin <= topWithin[1]
-isLabelled2 <- C$membership == 2 & rankWithin <= topWithin[2]
-isLabelled3 <- C$membership == 3 & rankWithin <= topWithin[3]
-isLabelled4 <- C$membership == 4 & rankWithin <= topWithin[4]
-isLabelled5 <- C$membership == 5 & rankWithin <= topWithin[5]
-isLabelled6 <- C$membership == 6 & rankWithin <= topWithin[6]
-isLabelled7 <- C$membership == 7 & rankWithin <= topWithin[7]
-isLabelled <- isLabelled1 | isLabelled2 | isLabelled3 | isLabelled4 | isLabelled5 | isLabelled6 | isLabelled7
+isLabelled1  <- C$membership ==  1 & rankWithin <= topWithin[ 1]
+isLabelled2  <- C$membership ==  2 & rankWithin <= topWithin[ 2]
+isLabelled3  <- C$membership ==  3 & rankWithin <= topWithin[ 3]
+isLabelled4  <- C$membership ==  4 & rankWithin <= topWithin[ 4]
+isLabelled5  <- C$membership ==  5 & rankWithin <= topWithin[ 5]
+isLabelled6  <- C$membership ==  6 & rankWithin <= topWithin[ 6]
+isLabelled7  <- C$membership ==  7 & rankWithin <= topWithin[ 7]
+isLabelled8  <- C$membership ==  8 & rankWithin <= topWithin[ 8]
+isLabelled9  <- C$membership ==  9 & rankWithin <= topWithin[ 9]
+isLabelled10 <- C$membership == 10 & rankWithin <= topWithin[10]
+isLabelled11 <- C$membership == 11 & rankWithin <= topWithin[11]
+isLabelled <- isLabelled1 | isLabelled2 | isLabelled3 | isLabelled4 | isLabelled5 | isLabelled6 | isLabelled7 | isLabelled8 | isLabelled9 | isLabelled10 | isLabelled11
 labNode[!isLabelled] <- NA
 # labNode[C$membership != 5 & nameF != "Cat"] <- NA
 ```
@@ -150,7 +164,7 @@ P <- function(vertex.label.cex=1) {
   set.seed(seed)
   plot(C, G,
        vertex.label=labNode, 
-       vertex.label.color="black",
+       vertex.label.color="#0000007F",
        vertex.label.dist=1/4,
        vertex.label.family="sans",
        vertex.label.cex=vertex.label.cex, 
@@ -167,17 +181,27 @@ P <- function(vertex.label.cex=1) {
 
 Show low resolution plot for HTML file. Set the random number seed so when a high resolution version is created, it will have the same layout as this version.
 ```{r NetworkVisualizationLowRes, dpi=72, fig.height=12, fig.width=12}
-id <- communities(C)[1:nComm]
+id <- communities(C)[1:maxComm]
 require(RColorBrewer, quietly=TRUE)
-palette <- brewer.pal(nComm + 1, "Set1")
-node.color <- c(palette[1:nComm], rep(palette[nComm + 1], max(C$membership) - nComm))
+palette <- brewer.pal(maxComm + 1, "Spectral")
+node.color <- c(palette[1:maxComm], rep(palette[maxComm + 1], max(C$membership) - maxComm))
 seed <- Sys.time()
 P(vertex.label.cex=1)
 ```
+
 Create high resolution PNG file for importing into presentations.
 ```{r NetworkVisualizationHiRes, dpi=600, fig.height=12, fig.width=12, fig.show='hide'}
 P(vertex.label.cex=1/2)
 ```
+
+Create a data frame of the network.
+
+```{r}
+D <- data.frame(name=paste(nameF, nameL), comm=C$membership, isLabelled, btwn, close, deg)
+D[order(D$comm, !D$isLabelled), ]
+```
+
+**Need to update**
 
 Just eyeballing these communities, here's what I'm seeing:
 * The green community is a core group of friends
@@ -198,7 +222,7 @@ Just eyeballing these communities, here's what I'm seeing:
 It's obvious from the plot and the betweenness scores that Cat and Erin are crucial bridges tying a few large communities together.
 
 Create interactive 3-D high resolution.
-```{r NetworkVisualization3D, tidy=FALSE}
+```{r NetworkVisualization3D, tidy=FALSE, eval=FALSE}
 l <- layout.fruchterman.reingold(G, dim=3)
 rglplot(G,
         layout=l,
