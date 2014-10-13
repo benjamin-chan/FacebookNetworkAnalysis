@@ -1,7 +1,7 @@
 # My Facebook network
 Benjamin Chan (https://www.facebook.com/benjamin.ks.chan)  
   
-Build off of the first assignment from the Coursera Social Network Analysis course. Below are part of the instructions from the first assignment from that course. After downloading my Facebook network data, I examine centrality and communities in the network using R version 3.1.1 (2014-07-10) with the `igraph` package. I used the RStudio IDE with Knitr to generate this HTML file. This analysis was run on 2014-10-08 09:48:41.
+Build off of the first assignment from the Coursera Social Network Analysis course. Below are part of the instructions from the first assignment from that course. After downloading my Facebook network data, I examine centrality and communities in the network using R version 3.1.1 (2014-07-10) with the `igraph` package. I used the RStudio IDE with Knitr to generate this HTML file. This analysis was run on 2014-10-12 23:22:54.
 
 
 Getting Facebook network data
@@ -21,7 +21,7 @@ setwd("~/GitHub repositories/FacebookNetworkAnalysis")
 require(igraph, quietly=TRUE)
 G <- read.graph(file="ChanFacebook.gml", format="gml")
 ```
-My GML file was last modified on 2014-10-08 08:22:48. As of that date, there are 367 nodes.
+My GML file was last modified on 2014-10-07 21:38:26. As of that date, there are 367 nodes.
 
 Create first name and initials vectors from names. I'll want to use these to label nodes when plotting the network.
 
@@ -77,29 +77,29 @@ top <- top[order(top$Degree, decreasing=TRUE),]
 print(xtable(top, digits=0), type="html", include.rownames=FALSE)
 ```
 
-<!-- html table generated in R 3.1.1 by xtable 1.7-3 package -->
-<!-- Wed Oct 08 09:48:41 2014 -->
-<TABLE border=1>
-<TR> <TH> Name </TH> <TH> Degree </TH>  </TR>
-  <TR> <TD> Yassine Diboun </TD> <TD align="right"> 88 </TD> </TR>
-  <TR> <TD> Glenn Tachiyama </TD> <TD align="right"> 74 </TD> </TR>
-  <TR> <TD> Todd Janssen </TD> <TD align="right"> 72 </TD> </TR>
-  <TR> <TD> Jason Leman </TD> <TD align="right"> 68 </TD> </TR>
-  <TR> <TD> Charles Replogle </TD> <TD align="right"> 66 </TD> </TR>
-  <TR> <TD> Willie McBride </TD> <TD align="right"> 62 </TD> </TR>
-  <TR> <TD> Paul Nelson </TD> <TD align="right"> 62 </TD> </TR>
-  <TR> <TD> Jennifer Love </TD> <TD align="right"> 61 </TD> </TR>
-  <TR> <TD> Sarah Duncan </TD> <TD align="right"> 60 </TD> </TR>
-  <TR> <TD> Samantha de la Vega </TD> <TD align="right"> 59 </TD> </TR>
-  <TR> <TD> Anne Crispino-Taylor </TD> <TD align="right"> 58 </TD> </TR>
-  <TR> <TD> Trevor Hostetler </TD> <TD align="right"> 58 </TD> </TR>
-  <TR> <TD> Kevin Karr </TD> <TD align="right"> 56 </TD> </TR>
-  <TR> <TD> Larry Stephens </TD> <TD align="right"> 55 </TD> </TR>
-  <TR> <TD> Cheri Redwine </TD> <TD align="right"> 53 </TD> </TR>
-  <TR> <TD> Renee Seker </TD> <TD align="right"> 53 </TD> </TR>
-  <TR> <TD> T.J. Ford </TD> <TD align="right"> 52 </TD> </TR>
-  <TR> <TD> Moe Codino </TD> <TD align="right"> 52 </TD> </TR>
-   </TABLE>
+<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<!-- Sun Oct 12 23:22:54 2014 -->
+<table border=1>
+<tr> <th> Name </th> <th> Degree </th>  </tr>
+  <tr> <td> Yassine Diboun </td> <td align="right"> 88 </td> </tr>
+  <tr> <td> Glenn Tachiyama </td> <td align="right"> 74 </td> </tr>
+  <tr> <td> Todd Janssen </td> <td align="right"> 72 </td> </tr>
+  <tr> <td> Jason Leman </td> <td align="right"> 68 </td> </tr>
+  <tr> <td> Charles Replogle </td> <td align="right"> 66 </td> </tr>
+  <tr> <td> Willie McBride </td> <td align="right"> 62 </td> </tr>
+  <tr> <td> Paul Nelson </td> <td align="right"> 62 </td> </tr>
+  <tr> <td> Jennifer Love </td> <td align="right"> 61 </td> </tr>
+  <tr> <td> Sarah Duncan </td> <td align="right"> 60 </td> </tr>
+  <tr> <td> Samantha de la Vega </td> <td align="right"> 59 </td> </tr>
+  <tr> <td> Anne Crispino-Taylor </td> <td align="right"> 58 </td> </tr>
+  <tr> <td> Trevor Hostetler </td> <td align="right"> 58 </td> </tr>
+  <tr> <td> Kevin Karr </td> <td align="right"> 56 </td> </tr>
+  <tr> <td> Larry Stephens </td> <td align="right"> 55 </td> </tr>
+  <tr> <td> Cheri Redwine </td> <td align="right"> 53 </td> </tr>
+  <tr> <td> Renee Seker </td> <td align="right"> 53 </td> </tr>
+  <tr> <td> T.J. Ford </td> <td align="right"> 52 </td> </tr>
+  <tr> <td> Moe Codino </td> <td align="right"> 52 </td> </tr>
+   </table>
 
 Calculate **closeness** centrality. Closeness is a measure of how many steps are required to access every other node. It's a measure of how close a node is to all the action. A person with high closeness, however, doesn't necessarily have to have very many friends or be in between relationship.
 
@@ -146,36 +146,36 @@ top <- top[order(top$Betweenness, decreasing=TRUE),]
 print(xtable(top, digits=0), type="html")
 ```
 
-<!-- html table generated in R 3.1.1 by xtable 1.7-3 package -->
-<!-- Wed Oct 08 09:48:41 2014 -->
-<TABLE border=1>
-<TR> <TH>  </TH> <TH> Rank </TH> <TH> Name </TH> <TH> Betweenness </TH>  </TR>
-  <TR> <TD align="right"> 61 </TD> <TD align="right"> 1 </TD> <TD> Cat Buckley </TD> <TD align="right"> 14597 </TD> </TR>
-  <TR> <TD align="right"> 149 </TD> <TD align="right"> 2 </TD> <TD> Heather Fowler </TD> <TD align="right"> 12517 </TD> </TR>
-  <TR> <TD align="right"> 293 </TD> <TD align="right"> 3 </TD> <TD> Evan Freeman </TD> <TD align="right"> 12175 </TD> </TR>
-  <TR> <TD align="right"> 166 </TD> <TD align="right"> 4 </TD> <TD> Annie Bencomo </TD> <TD align="right"> 7904 </TD> </TR>
-  <TR> <TD align="right"> 82 </TD> <TD align="right"> 5 </TD> <TD> Marc Baumgartner </TD> <TD align="right"> 7411 </TD> </TR>
-  <TR> <TD align="right"> 87 </TD> <TD align="right"> 6 </TD> <TD> Lucia Longoria </TD> <TD align="right"> 4275 </TD> </TR>
-  <TR> <TD align="right"> 60 </TD> <TD align="right"> 7 </TD> <TD> Yassine Diboun </TD> <TD align="right"> 3876 </TD> </TR>
-  <TR> <TD align="right"> 197 </TD> <TD align="right"> 8 </TD> <TD> Christopher J. Barker </TD> <TD align="right"> 3654 </TD> </TR>
-  <TR> <TD align="right"> 189 </TD> <TD align="right"> 9 </TD> <TD> Allison Cox </TD> <TD align="right"> 3609 </TD> </TR>
-  <TR> <TD align="right"> 6 </TD> <TD align="right"> 10 </TD> <TD> Jeff Waskowiak </TD> <TD align="right"> 3260 </TD> </TR>
-  <TR> <TD align="right"> 331 </TD> <TD align="right"> 11 </TD> <TD> Henry Barrera </TD> <TD align="right"> 3160 </TD> </TR>
-  <TR> <TD align="right"> 108 </TD> <TD align="right"> 12 </TD> <TD> Julie Honse </TD> <TD align="right"> 2928 </TD> </TR>
-  <TR> <TD align="right"> 310 </TD> <TD align="right"> 13 </TD> <TD> Erin 'Davis' Thekkedom </TD> <TD align="right"> 2864 </TD> </TR>
-  <TR> <TD align="right"> 221 </TD> <TD align="right"> 14 </TD> <TD> Sandy Bacharach </TD> <TD align="right"> 2841 </TD> </TR>
-  <TR> <TD align="right"> 183 </TD> <TD align="right"> 15 </TD> <TD> Gregory Gourdet </TD> <TD align="right"> 2815 </TD> </TR>
-  <TR> <TD align="right"> 177 </TD> <TD align="right"> 16 </TD> <TD> Johnny Buell </TD> <TD align="right"> 2810 </TD> </TR>
-  <TR> <TD align="right"> 214 </TD> <TD align="right"> 17 </TD> <TD> Fernando Viciconte </TD> <TD align="right"> 2385 </TD> </TR>
-  <TR> <TD align="right"> 171 </TD> <TD align="right"> 18 </TD> <TD> Glenn Tachiyama </TD> <TD align="right"> 2356 </TD> </TR>
-  <TR> <TD align="right"> 21 </TD> <TD align="right"> 19 </TD> <TD> Bekah Wolf </TD> <TD align="right"> 2299 </TD> </TR>
-  <TR> <TD align="right"> 19 </TD> <TD align="right"> 20 </TD> <TD> Alex Asselin </TD> <TD align="right"> 2102 </TD> </TR>
-  <TR> <TD align="right"> 18 </TD> <TD align="right"> 21 </TD> <TD> James Wallace </TD> <TD align="right"> 2006 </TD> </TR>
-  <TR> <TD align="right"> 241 </TD> <TD align="right"> 22 </TD> <TD> Nancy Lee </TD> <TD align="right"> 1935 </TD> </TR>
-  <TR> <TD align="right"> 239 </TD> <TD align="right"> 23 </TD> <TD> Darin Swanson </TD> <TD align="right"> 1877 </TD> </TR>
-  <TR> <TD align="right"> 49 </TD> <TD align="right"> 24 </TD> <TD> Carrie Kosky Yerton </TD> <TD align="right"> 1865 </TD> </TR>
-  <TR> <TD align="right"> 244 </TD> <TD align="right"> 25 </TD> <TD> Ann Wallace </TD> <TD align="right"> 1839 </TD> </TR>
-   </TABLE>
+<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<!-- Sun Oct 12 23:22:55 2014 -->
+<table border=1>
+<tr> <th>  </th> <th> Rank </th> <th> Name </th> <th> Betweenness </th>  </tr>
+  <tr> <td align="right"> 61 </td> <td align="right"> 1 </td> <td> Cat Buckley </td> <td align="right"> 14597 </td> </tr>
+  <tr> <td align="right"> 149 </td> <td align="right"> 2 </td> <td> Heather Fowler </td> <td align="right"> 12517 </td> </tr>
+  <tr> <td align="right"> 293 </td> <td align="right"> 3 </td> <td> Evan Freeman </td> <td align="right"> 12175 </td> </tr>
+  <tr> <td align="right"> 166 </td> <td align="right"> 4 </td> <td> Annie Bencomo </td> <td align="right"> 7904 </td> </tr>
+  <tr> <td align="right"> 82 </td> <td align="right"> 5 </td> <td> Marc Baumgartner </td> <td align="right"> 7411 </td> </tr>
+  <tr> <td align="right"> 87 </td> <td align="right"> 6 </td> <td> Lucia Longoria </td> <td align="right"> 4275 </td> </tr>
+  <tr> <td align="right"> 60 </td> <td align="right"> 7 </td> <td> Yassine Diboun </td> <td align="right"> 3876 </td> </tr>
+  <tr> <td align="right"> 197 </td> <td align="right"> 8 </td> <td> Christopher J. Barker </td> <td align="right"> 3654 </td> </tr>
+  <tr> <td align="right"> 189 </td> <td align="right"> 9 </td> <td> Allison Cox </td> <td align="right"> 3609 </td> </tr>
+  <tr> <td align="right"> 6 </td> <td align="right"> 10 </td> <td> Jeff Waskowiak </td> <td align="right"> 3260 </td> </tr>
+  <tr> <td align="right"> 331 </td> <td align="right"> 11 </td> <td> Henry Barrera </td> <td align="right"> 3160 </td> </tr>
+  <tr> <td align="right"> 108 </td> <td align="right"> 12 </td> <td> Julie Honse </td> <td align="right"> 2928 </td> </tr>
+  <tr> <td align="right"> 310 </td> <td align="right"> 13 </td> <td> Erin 'Davis' Thekkedom </td> <td align="right"> 2864 </td> </tr>
+  <tr> <td align="right"> 221 </td> <td align="right"> 14 </td> <td> Sandy Bacharach </td> <td align="right"> 2841 </td> </tr>
+  <tr> <td align="right"> 183 </td> <td align="right"> 15 </td> <td> Gregory Gourdet </td> <td align="right"> 2815 </td> </tr>
+  <tr> <td align="right"> 177 </td> <td align="right"> 16 </td> <td> Johnny Buell </td> <td align="right"> 2810 </td> </tr>
+  <tr> <td align="right"> 214 </td> <td align="right"> 17 </td> <td> Fernando Viciconte </td> <td align="right"> 2385 </td> </tr>
+  <tr> <td align="right"> 171 </td> <td align="right"> 18 </td> <td> Glenn Tachiyama </td> <td align="right"> 2356 </td> </tr>
+  <tr> <td align="right"> 21 </td> <td align="right"> 19 </td> <td> Bekah Wolf </td> <td align="right"> 2299 </td> </tr>
+  <tr> <td align="right"> 19 </td> <td align="right"> 20 </td> <td> Alex Asselin </td> <td align="right"> 2102 </td> </tr>
+  <tr> <td align="right"> 18 </td> <td align="right"> 21 </td> <td> James Wallace </td> <td align="right"> 2006 </td> </tr>
+  <tr> <td align="right"> 241 </td> <td align="right"> 22 </td> <td> Nancy Lee </td> <td align="right"> 1935 </td> </tr>
+  <tr> <td align="right"> 239 </td> <td align="right"> 23 </td> <td> Darin Swanson </td> <td align="right"> 1877 </td> </tr>
+  <tr> <td align="right"> 49 </td> <td align="right"> 24 </td> <td> Carrie Kosky Yerton </td> <td align="right"> 1865 </td> </tr>
+  <tr> <td align="right"> 244 </td> <td align="right"> 25 </td> <td> Ann Wallace </td> <td align="right"> 1839 </td> </tr>
+   </table>
 
 Plot the association between degree centrality and betweenness centrality. See if there are any highly influential people (betweenness) who also have a high number of friends (degree).
 
@@ -286,6 +286,8 @@ isLabelled10 <- C$membership == 10 & rankWithin <= topWithin[10]
 isLabelled11 <- C$membership == 11 & rankWithin <= topWithin[11]
 isLabelled12 <- C$membership == 12 & rankWithin <= topWithin[12]
 isLabelled <- isLabelled1 | isLabelled2 | isLabelled3 | isLabelled4 | isLabelled5 | isLabelled6 | isLabelled7 | isLabelled8 | isLabelled9 | isLabelled10 | isLabelled11 | isLabelled12
+# isLabelledOther <- grepl("Cat$|Jackie|Moi", nameF)
+# isLabelled <- isLabelled | isLabelledOther
 labNode[!isLabelled] <- NA
 # labNode[C$membership != 5 & nameF != "Cat"] <- NA
 ```
@@ -306,7 +308,7 @@ P <- function(vertex.label.cex=1, vertex.label.color="#0000007F") {
        mark.groups=NA, 
        mark.col=NA,
        mark.border=palette,
-       edge.color=c("gray", "red")[crossing(C, G)+1],
+       edge.color=c("#7F7F7F3F", "#FF00003F")[crossing(C, G)+1],
        edge.width=1/2
        )
 }
@@ -319,7 +321,7 @@ id <- communities(C)[1:maxComm]
 require(RColorBrewer, quietly=TRUE)
 palette <- c(brewer.pal(maxComm, "Spectral"), "gray")
 node.color <- c(palette[1:maxComm], rep(palette[maxComm + 1], max(C$membership) - maxComm))
-seed <- Sys.time()
+seed <- file.info("ChanFacebook.gml")$mtime
 P(vertex.label.cex=1)
 ```
 
@@ -334,8 +336,8 @@ dev.off()
 ```
 
 ```
-## pdf 
-##   2
+## RStudioGD 
+##         2
 ```
 
 Create a data frame of the network.
@@ -728,7 +730,9 @@ D[order(D$comm, !D$isLabelled), ]
 * Community 9 is a secondary group of Portland friends.
 * Community 10 is a core group of Portland friends.
 * Community 11 is a secondary group of Portland friends that has connections to Community 9.
-* Community 12 is the *junk* community of people that don't fit in with a larger community within my network (gray nodes)
+* Community 12 is the *misfits* community of people that either
+  + Don't fit in with a larger community within my network, or
+  + Truly bridge the other 11 well-defined communities to an extent that they don't belong in a single community
 * There are a number of key people that connect 2 or more communities.
 
 Create interactive 3-D high resolution.

@@ -162,6 +162,8 @@ isLabelled10 <- C$membership == 10 & rankWithin <= topWithin[10]
 isLabelled11 <- C$membership == 11 & rankWithin <= topWithin[11]
 isLabelled12 <- C$membership == 12 & rankWithin <= topWithin[12]
 isLabelled <- isLabelled1 | isLabelled2 | isLabelled3 | isLabelled4 | isLabelled5 | isLabelled6 | isLabelled7 | isLabelled8 | isLabelled9 | isLabelled10 | isLabelled11 | isLabelled12
+# isLabelledOther <- grepl("Cat$|Jackie|Moi", nameF)
+# isLabelled <- isLabelled | isLabelledOther
 labNode[!isLabelled] <- NA
 # labNode[C$membership != 5 & nameF != "Cat"] <- NA
 ```
@@ -181,7 +183,7 @@ P <- function(vertex.label.cex=1, vertex.label.color="#0000007F") {
        mark.groups=NA, 
        mark.col=NA,
        mark.border=palette,
-       edge.color=c("gray", "red")[crossing(C, G)+1],
+       edge.color=c("#7F7F7F3F", "#FF00003F")[crossing(C, G)+1],
        edge.width=1/2
        )
 }
@@ -193,7 +195,7 @@ id <- communities(C)[1:maxComm]
 require(RColorBrewer, quietly=TRUE)
 palette <- c(brewer.pal(maxComm, "Spectral"), "gray")
 node.color <- c(palette[1:maxComm], rep(palette[maxComm + 1], max(C$membership) - maxComm))
-seed <- Sys.time()
+seed <- file.info("ChanFacebook.gml")$mtime
 P(vertex.label.cex=1)
 ```
 
@@ -222,7 +224,9 @@ D[order(D$comm, !D$isLabelled), ]
 * Community 9 is a secondary group of Portland friends.
 * Community 10 is a core group of Portland friends.
 * Community 11 is a secondary group of Portland friends that has connections to Community 9.
-* Community 12 is the *junk* community of people that don't fit in with a larger community within my network (gray nodes)
+* Community 12 is the *misfits* community of people that either
+  + Don't fit in with a larger community within my network, or
+  + Truly bridge the other 11 well-defined communities to an extent that they don't belong in a single community
 * There are a number of key people that connect 2 or more communities.
 
 Create interactive 3-D high resolution.
