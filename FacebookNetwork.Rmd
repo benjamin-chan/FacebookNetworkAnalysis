@@ -12,6 +12,7 @@ Build off of the first assignment from the Coursera Social Network Analysis cour
 
 Getting Facebook network data
 -----------------------------
+
 The following are instructions for downloading my own GML file is below. These instructions were taken from assignment 1 from the fall 2012 Coursera Social Network Analysis course.
 
 > In order to get your own network, complete the following steps:
@@ -21,14 +22,17 @@ The following are instructions for downloading my own GML file is below. These i
 > * Save the .gml file and load it into Gephi using "File -> Open...".
 
 Read the GML file.
+
 ```{r ReadGraph}
 setwd("~/GitHub repositories/FacebookNetworkAnalysis")
 require(igraph, quietly=TRUE)
 G <- read.graph(file="ChanFacebook.gml", format="gml")
 ```
+
 My GML file was last modified on `r as.character(file.info("ChanFacebook.gml")$mtime)`. As of that date, there are `r vcount(G)` nodes.
 
 Create first name and initials vectors from names. I'll want to use these to label nodes when plotting the network.
+
 ```{r NodeLabels}
 listName <- strsplit(V(G)$label, " ")
 nameF <- sapply(listName, head, 1)
@@ -43,23 +47,29 @@ head(label)
 
 Analysis questions
 ------------------
+
 I'm interested in two questions:
+
 * What communities exist in my network?
 * Who are the people who are "bridges" across communities?
 
 
 Centrality
 ----------
+
 Here's a link to [Wikipedia](http://en.wikipedia.org/wiki/Centrality) for some background information on centrality.
 
 Calculate **degree** centrality. This ends up not being too useful. Degree is really just a measure of how connected someone is. In Facebook terms, it's who has the most friends within my network.
+
 ```{r Degree}
 deg <- degree(G)
 summary(deg)
 ```
+
 The median degree, or number of friends, was `r median(deg)`. The highest number of friends a person in my network has was `r max(deg)`.
 
 Even though I don't want to focus on degree centrality, let's see who are the most connected people in my network.
+
 ```{r HighDegree, results='asis'}
 require(xtable, quietly=TRUE)
 lim <- sort(deg, decreasing=TRUE)[round(vcount(G) * 0.05)]
@@ -70,22 +80,27 @@ print(xtable(top, digits=0), type="html", include.rownames=FALSE)
 ```
 
 Calculate **closeness** centrality. Closeness is a measure of how many steps are required to access every other node. It's a measure of how close a node is to all the action. A person with high closeness, however, doesn't necessarily have to have very many friends or be in between relationship.
+
 ```{r Closeness}
 close <- closeness(G)
 summary(close)
 ```
+
 Again, I don't want to focus on closeness centrality since it's not really what I'm after in this analysis, so I won't say anything more about it.
 
 Calculate **betweenness** centrality. I'm going to focus on betweenness since it's going to get after one of my analysis questions, who are the "bridges" between people and communities? Betweenness is a measure of how often a node is in the pathway between two other nodes. I.e., a person with high betweenness can be a key player in introducing a large group of friends to another large group of friends. Such a person doesn't necessarily have to have a large number of friends themselves. But they could be in a unique position of influence in the network.
 
 Plot a histogram of betweenness scores. 
+
 ```{r Betweenness, fig.height=4}
 require(ggplot2, quietly=TRUE)
 btwn <- betweenness(G)
 summary(btwn)
 qplot(btwn, binwidth=1000)
 ```
+
 The absolute value of the scores don't mean much. But their relative values tell the story. There are a number of people with extremely high betweenness scores. Who are these people? List the 25 of people with the highest betweeness scores.
+
 ```{r HighBetweenness, results='asis'}
 rank <- length(btwn) - rank(btwn) + 1
 top <- data.frame("Rank"=rank, "Name"=V(G)$label, "Betweenness"=btwn)
@@ -97,6 +112,7 @@ print(xtable(top, digits=0), type="html")
 ```
 
 Plot the association between degree centrality and betweenness centrality. See if there are any highly influential people (betweenness) who also have a high number of friends (degree).
+
 ```{r AssociationCentrality, fig.height=4, fig.width=4}
 rsq <- format(cor(deg, btwn) ^2, digits=3)
 cntrl <- data.frame(deg, btwn, close)
@@ -111,6 +127,7 @@ ggplot(cntrl, aes(x=deg, y=btwn)) +
 Communities
 -----------
 Find communities using the edge betweenness algorithm.
+
 ```{r FindCommunities}
 C <- edge.betweenness.community(G)
 sizesOrdered <- sizes(C)[order(sizes(C), decreasing=TRUE)]
@@ -118,6 +135,7 @@ sizesOrdered
 maxComm <- 11
 commThreshold <- sizesOrdered[maxComm]
 ```
+
 There are `r maxComm` clearly large communities in my network. *Large* is defined as having more than `r commThreshold` people.
 
 Set the `r maxComm + 1` community as a *junk* community.
@@ -133,6 +151,7 @@ Visualize the network
 ---------------------
 
 Scale the size of a node's plotting symbol according to its betweenness centrality score. Scaling is by percentile (75%, 90%, 95%, 97.5%, 99%).
+
 ```{r ScaleSymbol, fig.height=4}
 q <- quantile(btwn, probs=c(0, 0.75, 0.9, 0.95, 0.975, 0.99, 1))
 size <- cut(btwn, breaks=q, include.lowest=TRUE, dig.lab=5)
@@ -141,6 +160,7 @@ V(G)$size <- unclass(size)
 ```
 
 Label the nodes with the top betweenness centrality within each community. This will help make sense of who are the important links between each community.
+
 ```{r SubsetLabels}
 labNode <- nameF
 labNode[labNode == "Marc"] <- paste(labNode[labNode == "Marc"], initL[labNode == "Marc"])  # Since there's 2 Marcs, paste their last initial to the label
@@ -169,6 +189,7 @@ labNode[!isLabelled] <- NA
 ```
 
 Create a function for `plot.igraph`.
+
 ```{r FunctionPlot, tidy=FALSE}
 P <- function(vertex.label.cex=1, vertex.label.color="#0000007F") {
   set.seed(seed)
@@ -190,6 +211,7 @@ P <- function(vertex.label.cex=1, vertex.label.color="#0000007F") {
 ```
 
 Show low resolution plot for HTML file. Set the random number seed so when a high resolution version is created, it will have the same layout as this version.
+
 ```{r NetworkVisualizationLowRes, dpi=72, fig.height=12, fig.width=12}
 id <- communities(C)[1:maxComm]
 require(RColorBrewer, quietly=TRUE)
@@ -200,6 +222,7 @@ P(vertex.label.cex=1)
 ```
 
 Create high resolution PNG file for importing into presentations.
+
 ```{r NetworkVisualizationHiRes, dpi=600, fig.height=12, fig.width=12, fig.show='hide'}
 png(filename="NetworkVisualizationHiRes.png", width=12, height=12, units="in", res=600)
 P(vertex.label.cex=1/2, vertex.label.color="#000000")
@@ -230,6 +253,7 @@ D[order(D$comm, !D$isLabelled), ]
 * There are a number of key people that connect 2 or more communities.
 
 Create interactive 3-D high resolution.
+
 ```{r NetworkVisualization3D, tidy=FALSE, eval=FALSE}
 l <- layout.fruchterman.reingold(G, dim=3)
 rglplot(G,
