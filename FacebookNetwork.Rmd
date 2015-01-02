@@ -253,6 +253,26 @@ D[order(D$comm, !D$isLabelled), ]
 * There are a number of key people that connect 2 or more communities.
 
 Create interactive 3-D high resolution.
+Open the `network.html` file in a browser.
+
+```{r}
+require(networkD3)
+edges <- data.frame(get.edgelist(G))
+names(edges) <- c("source", "target")
+edges$source <- edges$source - 1
+edges$target <- edges$target - 1
+edges$value <- 1
+vertices <- D[, c("name", "comm")]
+names(vertices) <- c("name", "group")
+vertices$name <- as.character(vertices$name)
+N <- forceNetwork(Links=edges, Nodes=vertices,
+                  Source="source", Target="target", Value = "value",
+                  NodeID = "name", Group="group",
+                  opacity=3/4)
+saveNetwork(N, "network.html")
+```
+
+**Don't use `rglplot`.**
 
 ```{r NetworkVisualization3D, tidy=FALSE, eval=FALSE}
 l <- layout.fruchterman.reingold(G, dim=3)

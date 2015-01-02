@@ -1,11 +1,12 @@
 # My Facebook network
 Benjamin Chan (https://www.facebook.com/benjamin.ks.chan)  
   
-Build off of the first assignment from the Coursera Social Network Analysis course. Below are part of the instructions from the first assignment from that course. After downloading my Facebook network data, I examine centrality and communities in the network using R version 3.1.1 (2014-07-10) with the `igraph` package. I used the RStudio IDE with Knitr to generate this HTML file. This analysis was run on 2014-10-12 23:22:54.
+Build off of the first assignment from the Coursera Social Network Analysis course. Below are part of the instructions from the first assignment from that course. After downloading my Facebook network data, I examine centrality and communities in the network using R version 3.1.1 (2014-07-10) with the `igraph` package. I used the RStudio IDE with Knitr to generate this HTML file. This analysis was run on 2015-01-02 05:51:21.
 
 
 Getting Facebook network data
 -----------------------------
+
 The following are instructions for downloading my own GML file is below. These instructions were taken from assignment 1 from the fall 2012 Coursera Social Network Analysis course.
 
 > In order to get your own network, complete the following steps:
@@ -16,14 +17,17 @@ The following are instructions for downloading my own GML file is below. These i
 
 Read the GML file.
 
+
 ```r
 setwd("~/GitHub repositories/FacebookNetworkAnalysis")
 require(igraph, quietly=TRUE)
 G <- read.graph(file="ChanFacebook.gml", format="gml")
 ```
-My GML file was last modified on 2014-10-07 21:38:26. As of that date, there are 367 nodes.
+
+My GML file was last modified on 2015-01-02 04:46:21. As of that date, there are 374 nodes.
 
 Create first name and initials vectors from names. I'll want to use these to label nodes when plotting the network.
+
 
 ```r
 listName <- strsplit(V(G)$label, " ")
@@ -38,22 +42,26 @@ head(label)
 
 ```
 ## [1] "Christopher" "David"       "Kati"        "Carla"       "Kevin"      
-## [6] "Jeff"
+## [6] "Ben"
 ```
 
 
 Analysis questions
 ------------------
+
 I'm interested in two questions:
+
 * What communities exist in my network?
 * Who are the people who are "bridges" across communities?
 
 
 Centrality
 ----------
+
 Here's a link to [Wikipedia](http://en.wikipedia.org/wiki/Centrality) for some background information on centrality.
 
 Calculate **degree** centrality. This ends up not being too useful. Degree is really just a measure of how connected someone is. In Facebook terms, it's who has the most friends within my network.
+
 
 ```r
 deg <- degree(G)
@@ -62,11 +70,13 @@ summary(deg)
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##     0.0     4.0    11.0    15.7    22.0    88.0
+##       0       5      11      16      22      93
 ```
-The median degree, or number of friends, was 11. The highest number of friends a person in my network has was 88.
+
+The median degree, or number of friends, was 11. The highest number of friends a person in my network has was 93.
 
 Even though I don't want to focus on degree centrality, let's see who are the most connected people in my network.
+
 
 ```r
 require(xtable, quietly=TRUE)
@@ -78,30 +88,32 @@ print(xtable(top, digits=0), type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
-<!-- Sun Oct 12 23:22:54 2014 -->
+<!-- Fri Jan 02 05:51:21 2015 -->
 <table border=1>
 <tr> <th> Name </th> <th> Degree </th>  </tr>
-  <tr> <td> Yassine Diboun </td> <td align="right"> 88 </td> </tr>
-  <tr> <td> Glenn Tachiyama </td> <td align="right"> 74 </td> </tr>
-  <tr> <td> Todd Janssen </td> <td align="right"> 72 </td> </tr>
-  <tr> <td> Jason Leman </td> <td align="right"> 68 </td> </tr>
-  <tr> <td> Charles Replogle </td> <td align="right"> 66 </td> </tr>
-  <tr> <td> Willie McBride </td> <td align="right"> 62 </td> </tr>
-  <tr> <td> Paul Nelson </td> <td align="right"> 62 </td> </tr>
-  <tr> <td> Jennifer Love </td> <td align="right"> 61 </td> </tr>
-  <tr> <td> Sarah Duncan </td> <td align="right"> 60 </td> </tr>
-  <tr> <td> Samantha de la Vega </td> <td align="right"> 59 </td> </tr>
-  <tr> <td> Anne Crispino-Taylor </td> <td align="right"> 58 </td> </tr>
-  <tr> <td> Trevor Hostetler </td> <td align="right"> 58 </td> </tr>
-  <tr> <td> Kevin Karr </td> <td align="right"> 56 </td> </tr>
-  <tr> <td> Larry Stephens </td> <td align="right"> 55 </td> </tr>
-  <tr> <td> Cheri Redwine </td> <td align="right"> 53 </td> </tr>
-  <tr> <td> Renee Seker </td> <td align="right"> 53 </td> </tr>
-  <tr> <td> T.J. Ford </td> <td align="right"> 52 </td> </tr>
-  <tr> <td> Moe Codino </td> <td align="right"> 52 </td> </tr>
+  <tr> <td> Yassine Diboun </td> <td align="right"> 93 </td> </tr>
+  <tr> <td> Todd Janssen </td> <td align="right"> 78 </td> </tr>
+  <tr> <td> Glenn Tachiyama </td> <td align="right"> 75 </td> </tr>
+  <tr> <td> Jason Leman </td> <td align="right"> 72 </td> </tr>
+  <tr> <td> Charles Replogle </td> <td align="right"> 67 </td> </tr>
+  <tr> <td> Paul Nelson </td> <td align="right"> 66 </td> </tr>
+  <tr> <td> Willie McBride </td> <td align="right"> 65 </td> </tr>
+  <tr> <td> Trevor Hostetler </td> <td align="right"> 63 </td> </tr>
+  <tr> <td> Sarah Duncan </td> <td align="right"> 62 </td> </tr>
+  <tr> <td> Jennifer Love </td> <td align="right"> 62 </td> </tr>
+  <tr> <td> Samantha de la Vega </td> <td align="right"> 60 </td> </tr>
+  <tr> <td> Kevin Karr </td> <td align="right"> 59 </td> </tr>
+  <tr> <td> Anne Crispino-Taylor </td> <td align="right"> 59 </td> </tr>
+  <tr> <td> Renee Seker </td> <td align="right"> 56 </td> </tr>
+  <tr> <td> Larry Stephens </td> <td align="right"> 56 </td> </tr>
+  <tr> <td> Cheri Redwine </td> <td align="right"> 55 </td> </tr>
+  <tr> <td> Sean Meissner </td> <td align="right"> 55 </td> </tr>
+  <tr> <td> T.J. Ford </td> <td align="right"> 55 </td> </tr>
+  <tr> <td> Moe Codino </td> <td align="right"> 54 </td> </tr>
    </table>
 
 Calculate **closeness** centrality. Closeness is a measure of how many steps are required to access every other node. It's a measure of how close a node is to all the action. A person with high closeness, however, doesn't necessarily have to have very many friends or be in between relationship.
+
 
 ```r
 close <- closeness(G)
@@ -110,13 +122,15 @@ summary(close)
 
 ```
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## 7.44e-06 8.63e-05 8.85e-05 8.22e-05 8.94e-05 9.17e-05
+## 7.17e-06 8.25e-05 8.42e-05 7.81e-05 8.50e-05 8.72e-05
 ```
+
 Again, I don't want to focus on closeness centrality since it's not really what I'm after in this analysis, so I won't say anything more about it.
 
 Calculate **betweenness** centrality. I'm going to focus on betweenness since it's going to get after one of my analysis questions, who are the "bridges" between people and communities? Betweenness is a measure of how often a node is in the pathway between two other nodes. I.e., a person with high betweenness can be a key player in introducing a large group of friends to another large group of friends. Such a person doesn't necessarily have to have a large number of friends themselves. But they could be in a unique position of influence in the network.
 
 Plot a histogram of betweenness scores. 
+
 
 ```r
 require(ggplot2, quietly=TRUE)
@@ -126,7 +140,7 @@ summary(btwn)
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##       0       1      40     512     445   14600
+##       0       1      42     513     415   14900
 ```
 
 ```r
@@ -134,7 +148,9 @@ qplot(btwn, binwidth=1000)
 ```
 
 ![plot of chunk Betweenness](./FacebookNetwork_files/figure-html/Betweenness.png) 
+
 The absolute value of the scores don't mean much. But their relative values tell the story. There are a number of people with extremely high betweenness scores. Who are these people? List the 25 of people with the highest betweeness scores.
+
 
 ```r
 rank <- length(btwn) - rank(btwn) + 1
@@ -147,37 +163,38 @@ print(xtable(top, digits=0), type="html")
 ```
 
 <!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
-<!-- Sun Oct 12 23:22:55 2014 -->
+<!-- Fri Jan 02 05:51:23 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Rank </th> <th> Name </th> <th> Betweenness </th>  </tr>
-  <tr> <td align="right"> 61 </td> <td align="right"> 1 </td> <td> Cat Buckley </td> <td align="right"> 14597 </td> </tr>
-  <tr> <td align="right"> 149 </td> <td align="right"> 2 </td> <td> Heather Fowler </td> <td align="right"> 12517 </td> </tr>
-  <tr> <td align="right"> 293 </td> <td align="right"> 3 </td> <td> Evan Freeman </td> <td align="right"> 12175 </td> </tr>
-  <tr> <td align="right"> 166 </td> <td align="right"> 4 </td> <td> Annie Bencomo </td> <td align="right"> 7904 </td> </tr>
-  <tr> <td align="right"> 82 </td> <td align="right"> 5 </td> <td> Marc Baumgartner </td> <td align="right"> 7411 </td> </tr>
-  <tr> <td align="right"> 87 </td> <td align="right"> 6 </td> <td> Lucia Longoria </td> <td align="right"> 4275 </td> </tr>
-  <tr> <td align="right"> 60 </td> <td align="right"> 7 </td> <td> Yassine Diboun </td> <td align="right"> 3876 </td> </tr>
-  <tr> <td align="right"> 197 </td> <td align="right"> 8 </td> <td> Christopher J. Barker </td> <td align="right"> 3654 </td> </tr>
-  <tr> <td align="right"> 189 </td> <td align="right"> 9 </td> <td> Allison Cox </td> <td align="right"> 3609 </td> </tr>
-  <tr> <td align="right"> 6 </td> <td align="right"> 10 </td> <td> Jeff Waskowiak </td> <td align="right"> 3260 </td> </tr>
-  <tr> <td align="right"> 331 </td> <td align="right"> 11 </td> <td> Henry Barrera </td> <td align="right"> 3160 </td> </tr>
-  <tr> <td align="right"> 108 </td> <td align="right"> 12 </td> <td> Julie Honse </td> <td align="right"> 2928 </td> </tr>
-  <tr> <td align="right"> 310 </td> <td align="right"> 13 </td> <td> Erin 'Davis' Thekkedom </td> <td align="right"> 2864 </td> </tr>
-  <tr> <td align="right"> 221 </td> <td align="right"> 14 </td> <td> Sandy Bacharach </td> <td align="right"> 2841 </td> </tr>
-  <tr> <td align="right"> 183 </td> <td align="right"> 15 </td> <td> Gregory Gourdet </td> <td align="right"> 2815 </td> </tr>
-  <tr> <td align="right"> 177 </td> <td align="right"> 16 </td> <td> Johnny Buell </td> <td align="right"> 2810 </td> </tr>
-  <tr> <td align="right"> 214 </td> <td align="right"> 17 </td> <td> Fernando Viciconte </td> <td align="right"> 2385 </td> </tr>
-  <tr> <td align="right"> 171 </td> <td align="right"> 18 </td> <td> Glenn Tachiyama </td> <td align="right"> 2356 </td> </tr>
-  <tr> <td align="right"> 21 </td> <td align="right"> 19 </td> <td> Bekah Wolf </td> <td align="right"> 2299 </td> </tr>
-  <tr> <td align="right"> 19 </td> <td align="right"> 20 </td> <td> Alex Asselin </td> <td align="right"> 2102 </td> </tr>
-  <tr> <td align="right"> 18 </td> <td align="right"> 21 </td> <td> James Wallace </td> <td align="right"> 2006 </td> </tr>
-  <tr> <td align="right"> 241 </td> <td align="right"> 22 </td> <td> Nancy Lee </td> <td align="right"> 1935 </td> </tr>
-  <tr> <td align="right"> 239 </td> <td align="right"> 23 </td> <td> Darin Swanson </td> <td align="right"> 1877 </td> </tr>
-  <tr> <td align="right"> 49 </td> <td align="right"> 24 </td> <td> Carrie Kosky Yerton </td> <td align="right"> 1865 </td> </tr>
-  <tr> <td align="right"> 244 </td> <td align="right"> 25 </td> <td> Ann Wallace </td> <td align="right"> 1839 </td> </tr>
+  <tr> <td align="right"> 62 </td> <td align="right"> 1 </td> <td> Cat Buckley </td> <td align="right"> 14905 </td> </tr>
+  <tr> <td align="right"> 150 </td> <td align="right"> 2 </td> <td> Heather Fowler </td> <td align="right"> 13894 </td> </tr>
+  <tr> <td align="right"> 299 </td> <td align="right"> 3 </td> <td> Evan Freeman </td> <td align="right"> 10927 </td> </tr>
+  <tr> <td align="right"> 168 </td> <td align="right"> 4 </td> <td> Annie Bencomo </td> <td align="right"> 8748 </td> </tr>
+  <tr> <td align="right"> 82 </td> <td align="right"> 5 </td> <td> Marc Baumgartner </td> <td align="right"> 8019 </td> </tr>
+  <tr> <td align="right"> 86 </td> <td align="right"> 6 </td> <td> Lucia Longoria </td> <td align="right"> 4373 </td> </tr>
+  <tr> <td align="right"> 61 </td> <td align="right"> 7 </td> <td> Yassine Diboun </td> <td align="right"> 4226 </td> </tr>
+  <tr> <td align="right"> 191 </td> <td align="right"> 8 </td> <td> Allison Cox </td> <td align="right"> 3897 </td> </tr>
+  <tr> <td align="right"> 107 </td> <td align="right"> 9 </td> <td> Julie Honse </td> <td align="right"> 3714 </td> </tr>
+  <tr> <td align="right"> 200 </td> <td align="right"> 10 </td> <td> Christopher J. Barker </td> <td align="right"> 3413 </td> </tr>
+  <tr> <td align="right"> 7 </td> <td align="right"> 11 </td> <td> Jeff Waskowiak </td> <td align="right"> 3214 </td> </tr>
+  <tr> <td align="right"> 336 </td> <td align="right"> 12 </td> <td> Henry Barrera </td> <td align="right"> 3096 </td> </tr>
+  <tr> <td align="right"> 185 </td> <td align="right"> 13 </td> <td> Gregory Gourdet </td> <td align="right"> 3004 </td> </tr>
+  <tr> <td align="right"> 179 </td> <td align="right"> 14 </td> <td> Johnny Buell </td> <td align="right"> 2964 </td> </tr>
+  <tr> <td align="right"> 224 </td> <td align="right"> 15 </td> <td> Sandy Bacharach </td> <td align="right"> 2744 </td> </tr>
+  <tr> <td align="right"> 217 </td> <td align="right"> 16 </td> <td> Fernando Viciconte </td> <td align="right"> 2454 </td> </tr>
+  <tr> <td align="right"> 194 </td> <td align="right"> 17 </td> <td> Nadia Khater </td> <td align="right"> 2401 </td> </tr>
+  <tr> <td align="right"> 173 </td> <td align="right"> 18 </td> <td> Glenn Tachiyama </td> <td align="right"> 2297 </td> </tr>
+  <tr> <td align="right"> 20 </td> <td align="right"> 19 </td> <td> Alex Asselin </td> <td align="right"> 2242 </td> </tr>
+  <tr> <td align="right"> 316 </td> <td align="right"> 20 </td> <td> Erin 'Davis' Thekkedom </td> <td align="right"> 2134 </td> </tr>
+  <tr> <td align="right"> 127 </td> <td align="right"> 21 </td> <td> Rebecca Ettlinger Waltz </td> <td align="right"> 2129 </td> </tr>
+  <tr> <td align="right"> 243 </td> <td align="right"> 22 </td> <td> Darin Swanson </td> <td align="right"> 2091 </td> </tr>
+  <tr> <td align="right"> 19 </td> <td align="right"> 23 </td> <td> James Wallace </td> <td align="right"> 2048 </td> </tr>
+  <tr> <td align="right"> 22 </td> <td align="right"> 24 </td> <td> Bekah Wolf </td> <td align="right"> 1995 </td> </tr>
+  <tr> <td align="right"> 245 </td> <td align="right"> 25 </td> <td> Nancy Lee </td> <td align="right"> 1964 </td> </tr>
    </table>
 
 Plot the association between degree centrality and betweenness centrality. See if there are any highly influential people (betweenness) who also have a high number of friends (degree).
+
 
 ```r
 rsq <- format(cor(deg, btwn) ^2, digits=3)
@@ -196,6 +213,7 @@ Communities
 -----------
 Find communities using the edge betweenness algorithm.
 
+
 ```r
 C <- edge.betweenness.community(G)
 sizesOrdered <- sizes(C)[order(sizes(C), decreasing=TRUE)]
@@ -204,19 +222,20 @@ sizesOrdered
 
 ```
 ## Community sizes
-##  5  6 15  4 10  1  9 11 17 13  7 18  8 20 36  2 14 21 25 28 29 31 45 46  3 
-## 80 50 35 28 27 18 14 13 12 11  7  5  4  4  4  3  2  2  2  2  2  2  2  2  1 
-## 12 16 19 22 23 24 26 27 30 32 33 34 35 37 38 39 40 41 42 43 44 47 48 49 50 
+##  6  7 15  4 11  1  5 10 17 13  8  9 18 33  2 19 14 23 25 27 34 41 42  3 12 
+## 88 50 38 29 27 18 14 14 12 11  8  5  5  4  3  3  2  2  2  2  2  2  2  1  1 
+## 16 20 21 22 24 26 28 29 30 31 32 35 36 37 38 39 40 43 44 45 46 47 48 49 50 
 ##  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 
-## 51 52 53 54 55 56 57 58 59 60 
-##  1  1  1  1  1  1  1  1  1  1
+## 51 52 53 54 
+##  1  1  1  1
 ```
 
 ```r
 maxComm <- 11
 commThreshold <- sizesOrdered[maxComm]
 ```
-There are 11 clearly large communities in my network. *Large* is defined as having more than 7 people.
+
+There are 11 clearly large communities in my network. *Large* is defined as having more than 8 people.
 
 Set the 12 community as a *junk* community.
 
@@ -230,7 +249,7 @@ table(C$membership)
 ```
 ## 
 ##  1  2  3  4  5  6  7  8  9 10 11 12 
-## 18 28 80 50  7 14 27 13 11 35 12 72
+## 18 29 14 88 50  8 14 27 11 38 12 65
 ```
 
 
@@ -239,6 +258,7 @@ Visualize the network
 
 Scale the size of a node's plotting symbol according to its betweenness centrality score. Scaling is by percentile (75%, 90%, 95%, 97.5%, 99%).
 
+
 ```r
 q <- quantile(btwn, probs=c(0, 0.75, 0.9, 0.95, 0.975, 0.99, 1))
 size <- cut(btwn, breaks=q, include.lowest=TRUE, dig.lab=5)
@@ -246,9 +266,9 @@ summary(size)
 ```
 
 ```
-##      [0,445.18] (445.18,1255.2] (1255.2,2239.7] (2239.7,3244.8] 
-##             275              55              18               9 
-## (3244.8,7578.3]  (7578.3,14597] 
+##         [0,415]      (415,1279]   (1279,2171.9] (2171.9,3348.1] 
+##             280              56              19               9 
+## (3348.1,8215.8]  (8215.8,14905] 
 ##               6               4
 ```
 
@@ -257,6 +277,7 @@ V(G)$size <- unclass(size)
 ```
 
 Label the nodes with the top betweenness centrality within each community. This will help make sense of who are the important links between each community.
+
 
 ```r
 labNode <- nameF
@@ -268,7 +289,7 @@ message(sprintf("The top %3.1f%% within each community leads to labelling %2.0f 
 ```
 
 ```
-## The top 7.0% within each community leads to labelling 26 nodes.
+## The top 7.0% within each community leads to labelling 28 nodes.
 ```
 
 ```r
@@ -294,6 +315,7 @@ labNode[!isLabelled] <- NA
 
 Create a function for `plot.igraph`.
 
+
 ```r
 P <- function(vertex.label.cex=1, vertex.label.color="#0000007F") {
   set.seed(seed)
@@ -316,6 +338,7 @@ P <- function(vertex.label.cex=1, vertex.label.color="#0000007F") {
 
 Show low resolution plot for HTML file. Set the random number seed so when a high resolution version is created, it will have the same layout as this version.
 
+
 ```r
 id <- communities(C)[1:maxComm]
 require(RColorBrewer, quietly=TRUE)
@@ -329,6 +352,7 @@ P(vertex.label.cex=1)
 
 Create high resolution PNG file for importing into presentations.
 
+
 ```r
 png(filename="NetworkVisualizationHiRes.png", width=12, height=12, units="in", res=600)
 P(vertex.label.cex=1/2, vertex.label.color="#000000")
@@ -336,8 +360,8 @@ dev.off()
 ```
 
 ```
-## RStudioGD 
-##         2
+## pdf 
+##   2
 ```
 
 Create a data frame of the network.
@@ -350,373 +374,380 @@ D[order(D$comm, !D$isLabelled), ]
 
 ```
 ##                      name comm isLabelled      btwn     close deg
-## 29            Judy Kroone    1       TRUE 1.248e+03 8.885e-05  17
-## 1        Christopher Chan    1      FALSE 4.916e+00 8.634e-05  11
-## 3                 Kati Wu    1      FALSE 1.101e+00 8.636e-05  13
-## 15              Eric Chan    1      FALSE 3.037e+00 8.638e-05  16
-## 16             Derek Chan    1      FALSE 3.037e+00 8.638e-05  16
-## 22           Patrick Chan    1      FALSE 1.631e+00 8.636e-05  14
-## 44               Jason Wu    1      FALSE 2.253e+00 8.637e-05  15
-## 94             Jeannie Wu    1      FALSE 2.111e-01 8.633e-05  10
-## 98            Kiyomi Ueno    1      FALSE 1.152e+00 8.636e-05  13
-## 104          Jocelyn Chan    1      FALSE 9.247e+02 8.883e-05  15
-## 113              Vania Ng    1      FALSE 3.159e-01 8.634e-05  11
-## 118            Chris Sing    1      FALSE 2.111e-01 8.633e-05  10
-## 142             Carter Ng    1      FALSE 3.037e+00 8.638e-05  16
-## 150             Anna Liao    1      FALSE 1.096e+03 8.885e-05  17
-## 176            Brian Chan    1      FALSE 2.000e-01 8.633e-05  10
-## 266               Amy Lim    1      FALSE 6.440e+01 8.874e-05   3
-## 274          Mable Cheung    1      FALSE 8.705e+02 8.883e-05  14
-## 317              Karen Ng    1      FALSE 4.250e-01 8.633e-05  10
-## 107          Marc Frommer    2       TRUE 1.361e+03 8.999e-05  32
-## 258            Roger Chou    2       TRUE 1.096e+03 8.990e-05  22
-## 5           Kevin Douglas    2      FALSE 3.813e+01 8.904e-05  25
-## 24          Craig Dickson    2      FALSE 1.083e+02 8.924e-05  31
-## 114           Kathy Klass    2      FALSE 5.506e-01 8.785e-05  12
-## 133         Juli Danielle    2      FALSE 3.150e+01 8.907e-05  17
-## 145         Steve Walters    2      FALSE 4.785e+02 8.941e-05  45
-## 163    Christopher Warren    2      FALSE 9.860e+02 8.981e-05  28
-## 164            Steven Yee    2      FALSE 9.474e+01 8.901e-05  28
-## 181             May Cheng    2      FALSE 5.360e-01 8.782e-05  10
-## 182            Matt Hagen    2      FALSE 1.860e+02 8.933e-05  38
-## 188          Donald Mukai    2      FALSE 2.561e+00 8.885e-05  11
-## 207            Andy Fritz    2      FALSE 1.743e+01 8.893e-05  20
-## 212            Bob Martin    2      FALSE 1.366e+01 8.797e-05  20
-## 213          Roger Michel    2      FALSE 2.959e+01 8.902e-05  23
-## 216             Dave Mari    2      FALSE 3.734e+01 8.890e-05  18
-## 224       Patti Krebsbach    2      FALSE 2.814e+01 8.892e-05  23
-## 228           Eric Barnes    2      FALSE 1.767e+02 8.926e-05  37
-## 235         David Spooner    2      FALSE 3.222e+00 8.818e-05  14
-## 242      Terry Sentinella    2      FALSE 3.905e+02 8.934e-05  44
-## 252         Ginger Gruber    2      FALSE 1.082e+01 8.824e-05  21
-## 270           Alvin Crain    2      FALSE 1.235e+02 8.922e-05  32
-## 275              Van Phan    2      FALSE 4.638e+01 8.918e-05  29
-## 290      Shannon Willford    2      FALSE 1.351e+01 8.828e-05  15
-## 292            Russ Smith    2      FALSE 3.013e+00 8.819e-05  16
-## 305          Bill Barmore    2      FALSE 5.773e+00 8.826e-05  16
-## 353             Lisa Wood    2      FALSE 2.645e+01 8.898e-05  20
-## 365          Stevie Lopez    2      FALSE 6.690e+01 8.914e-05  25
-## 6          Jeff Waskowiak    3       TRUE 3.260e+03 8.993e-05  29
-## 60         Yassine Diboun    3       TRUE 3.876e+03 9.131e-05  88
-## 82       Marc Baumgartner    3       TRUE 7.411e+03 9.059e-05  32
-## 171       Glenn Tachiyama    3       TRUE 2.356e+03 9.030e-05  74
-## 183       Gregory Gourdet    3       TRUE 2.815e+03 9.059e-05  37
-## 239         Darin Swanson    3       TRUE 1.877e+03 8.957e-05  21
-## 8             Jason Leman    3      FALSE 8.945e+02 9.041e-05  68
-## 13           David Herron    3      FALSE 9.136e+00 8.955e-05  14
-## 20           Ben Blessing    3      FALSE 4.760e+01 8.913e-05  22
-## 31              Dana Katz    3      FALSE 1.632e+01 8.909e-05  37
-## 36         Willie McBride    3      FALSE 1.181e+03 9.079e-05  62
-## 51           Gary Robbins    3      FALSE 4.510e+02 8.940e-05  24
-## 53          Desiree Marek    3      FALSE 2.310e+02 9.003e-05  46
-## 56       Alessandra Novak    3      FALSE 8.413e+02 8.947e-05  19
-## 63         Jocelyn Nelson    3      FALSE 9.340e+01 8.990e-05  28
-## 66       Lisa Hatley-Nasr    3      FALSE 7.495e+00 8.887e-05  11
-## 67          Rhiannon Wood    3      FALSE 2.594e+00 8.892e-05  20
-## 68            Jeremy Hurl    3      FALSE 6.349e+00 8.897e-05  25
-## 72           Marta Fisher    3      FALSE 1.321e+01 8.910e-05  32
-## 78             Neil Baker    3      FALSE 2.334e+01 8.940e-05  20
-## 101             Mac Smith    3      FALSE 4.344e+00 8.886e-05  14
-## 106          Christine An    3      FALSE 3.687e+00 8.902e-05  11
-## 117         Sarah Bradham    3      FALSE 2.139e+02 9.026e-05  41
-## 122            Sarah Shea    3      FALSE 1.418e+01 8.831e-05   7
-## 124        Jennifer Allen    3      FALSE 8.485e+01 8.985e-05  25
-## 125           Mary Ramsay    3      FALSE 2.068e+01 8.925e-05  25
-## 127         Cheri Redwine    3      FALSE 4.438e+02 8.943e-05  53
-## 130            Kevin Karr    3      FALSE 6.315e+02 9.042e-05  56
-## 144 Andrea Jarzombek-Holt    3      FALSE 2.084e+02 9.039e-05  49
-## 153             T.J. Ford    3      FALSE 6.731e+02 9.029e-05  52
-## 156         Leslie Gerein    3      FALSE 9.359e-01 8.808e-05   8
-## 159       Heather McGrath    3      FALSE 4.394e+02 9.022e-05  34
-## 170      Charles Replogle    3      FALSE 1.225e+03 9.066e-05  66
-## 172        Diana Bartolus    3      FALSE 1.874e+02 8.965e-05  27
-## 174           Renee Seker    3      FALSE 5.361e+02 9.074e-05  53
-## 184          Joel Dippold    3      FALSE 1.395e+03 9.029e-05  13
-## 185         Leif Rustvold    3      FALSE 1.085e-01 8.878e-05   8
-## 193          Sarah Duncan    3      FALSE 7.780e+02 9.048e-05  60
-## 203           Paul Nelson    3      FALSE 5.660e+02 9.048e-05  62
-## 205    Katie Christianson    3      FALSE 1.691e+02 8.981e-05  46
-## 210            Hugh Davis    3      FALSE 1.084e+02 8.988e-05  39
-## 211            Frank Page    3      FALSE 6.825e+00 8.909e-05  31
-## 223         Robert Orcutt    3      FALSE 3.719e+01 8.869e-05  14
-## 226            Mike Davis    3      FALSE 2.795e+02 9.028e-05  49
-## 227          Julie Thomas    3      FALSE 4.138e+02 8.999e-05  46
-## 231            Moi Lucero    3      FALSE 1.572e+03 9.018e-05  20
-## 233             Josh Owen    3      FALSE 5.760e+01 8.919e-05  22
-## 234             Jesse Cox    3      FALSE 7.630e+00 8.925e-05  21
-## 237            Matt Helms    3      FALSE 9.671e+01 8.998e-05  43
-## 246          Angela Drake    3      FALSE 2.151e-01 8.876e-05  10
-## 247         Nathan Herzog    3      FALSE 7.416e+01 8.912e-05  17
-## 255        Jeannie Horton    3      FALSE 3.301e+02 9.001e-05  39
-## 259     Ronda Sundermeier    3      FALSE 4.679e+02 9.012e-05  40
-## 262          Jeff Boggess    3      FALSE 2.574e+02 9.035e-05  49
-## 267         Samantha Vega    3      FALSE 6.448e+02 9.060e-05  59
-## 271             Pam Smith    3      FALSE 1.678e+02 8.974e-05  36
-## 286              Syd Long    3      FALSE 1.023e+02 8.975e-05  26
-## 287          Todd Janssen    3      FALSE 1.616e+03 9.108e-05  72
-## 291         Brian Janecek    3      FALSE 1.528e+02 9.005e-05  44
-## 308  Anne Crispino-Taylor    3      FALSE 7.307e+02 9.036e-05  58
-## 311        Capitol Ultras    3      FALSE 4.473e+02 8.994e-05  48
-## 313      Trevor Hostetler    3      FALSE 4.009e+02 9.022e-05  58
-## 318         Brandon Drake    3      FALSE 3.444e+02 9.030e-05  45
-## 319         Jeff McAlpine    3      FALSE 2.854e+02 8.955e-05  30
-## 321          Silvia Reyes    3      FALSE 3.556e+01 8.965e-05  30
-## 324        Justin Huggins    3      FALSE 3.573e+01 8.918e-05  18
-## 326           Eric Lubell    3      FALSE 1.724e+02 8.993e-05  39
-## 329   Rikilynn Mclenithan    3      FALSE 4.780e+01 8.953e-05  30
-## 332         Rick Kneedler    3      FALSE 9.335e+01 8.961e-05  32
-## 337            Mike Burke    3      FALSE 4.616e+01 8.916e-05  22
-## 340         David Chilson    3      FALSE 0.000e+00 8.850e-05   6
-## 341        Ricky Bartolus    3      FALSE 0.000e+00 8.879e-05  11
-## 343        Larry Stephens    3      FALSE 4.267e+02 9.039e-05  55
-## 351           Megan Bruce    3      FALSE 4.039e+01 8.942e-05  38
-## 355           Scott Dumdi    3      FALSE 1.627e+00 8.891e-05  21
-## 356            Moe Codino    3      FALSE 1.266e+02 8.974e-05  52
-## 362        Dennis Gamroth    3      FALSE 1.032e+01 8.880e-05  13
-## 363         Jennifer Love    3      FALSE 4.779e+02 9.054e-05  61
-## 364        Keith Shishido    3      FALSE 2.013e+01 8.920e-05  20
-## 367         Avery McCombs    3      FALSE 8.311e+00 8.897e-05  14
-## 191           Danny Cohen    4       TRUE 1.174e+03 8.769e-05  31
-## 293          Evan Freeman    4       TRUE 1.218e+04 8.932e-05  21
-## 310        Erin Thekkedom    4       TRUE 2.864e+03 8.721e-05   7
-## 327        Marcus Fischer    4       TRUE 1.821e+03 8.771e-05  19
-## 7      Colleen Schoonover    4      FALSE 1.132e+03 8.636e-05  18
-## 30             Justin Kim    4      FALSE 2.218e+01 8.575e-05  12
-## 43          Ashlyn Jaswal    4      FALSE 1.589e+00 8.488e-05   4
-## 50      Ankit Upadhyayula    4      FALSE 8.186e+02 8.762e-05  29
-## 58              Kim Huynh    4      FALSE 8.024e+02 8.767e-05  28
-## 73              Victor So    4      FALSE 3.152e+01 8.547e-05  24
-## 74        Dakota McMillan    4      FALSE 3.095e+02 8.574e-05  27
-## 77           Jon Anderson    4      FALSE 5.816e+02 8.754e-05  23
-## 79           Donovan Tran    4      FALSE 5.523e+02 8.734e-05  24
-## 83      Kellyn Christison    4      FALSE 5.344e+02 8.627e-05  10
-## 95           Megan Baxter    4      FALSE 7.248e+02 8.630e-05  13
-## 152             Grace Xia    4      FALSE 2.078e+02 8.727e-05  20
-## 154         Christina Hsu    4      FALSE 5.614e+02 8.757e-05  25
-## 173            Bre Ongley    4      FALSE 1.354e+02 8.560e-05  15
-## 175       Kyle Yasumiishi    4      FALSE 4.051e+01 8.582e-05  21
-## 187            Cathy Dinh    4      FALSE 3.070e+02 8.536e-05  11
-## 195         Ydali Olivera    4      FALSE 1.284e+01 8.570e-05   9
-## 201         Sean Morrison    4      FALSE 2.827e+01 8.541e-05   3
-## 208          Nicki Parker    4      FALSE 4.639e+02 8.718e-05  12
-## 248         Jordan Brazda    4      FALSE 2.291e+02 8.745e-05  10
-## 250              Eric Kim    4      FALSE 1.503e+02 8.606e-05  23
-## 257        Paige Singhose    4      FALSE 5.128e+02 8.751e-05  17
-## 284           Briana Chui    4      FALSE 9.911e+01 8.522e-05   4
-## 288          Nick Cropley    4      FALSE 6.550e+02 8.738e-05  26
-## 289    Megan Schermerhorn    4      FALSE 2.629e+02 8.731e-05  22
-## 294          Nick Hartley    4      FALSE 1.480e+00 8.524e-05   5
-## 297        Allison Rogers    4      FALSE 6.789e+01 8.598e-05  17
-## 300       DjBlast Sanchez    4      FALSE 2.397e+02 8.725e-05  12
-## 302      Mindy Kirschbaum    4      FALSE 6.082e+02 8.566e-05   7
-## 303          Jordan LeBle    4      FALSE 3.977e+01 8.717e-05  11
-## 304             Will Kent    4      FALSE 1.513e+01 8.544e-05  19
-## 307        Brian Grimsted    4      FALSE 5.882e-02 8.540e-05   4
-## 312          Garrett Mann    4      FALSE 5.154e+01 8.571e-05  11
-## 316           Brady Ogden    4      FALSE 1.711e+02 8.722e-05  11
-## 322          Carly DeLapp    4      FALSE 3.745e+02 8.747e-05  18
-## 325          Kyle Shorter    4      FALSE 5.729e+00 8.567e-05   7
-## 333           Marcus Kwon    4      FALSE 4.691e+00 8.531e-05   8
-## 334             Eryn Sych    4      FALSE 4.463e+01 8.583e-05  20
-## 336         Vlad Shapoval    4      FALSE 4.466e+02 8.733e-05  24
-## 338         Kaitie DoupÃ©    4      FALSE 5.620e+02 8.747e-05  15
-## 342        McKenna Spieth    4      FALSE 1.299e+02 8.572e-05  25
-## 344       Lauren Marshall    4      FALSE 1.966e+02 8.533e-05   9
-## 346         Sierra Monaco    4      FALSE 8.594e+01 8.691e-05   5
-## 347        Connor Brennan    4      FALSE 1.093e+00 8.530e-05   8
-## 348         Shane Brennan    4      FALSE 8.990e+00 8.546e-05  21
-## 366          Kyle Shorter    4      FALSE 4.700e+00 8.527e-05   7
-## 9     Krystle Flerchinger    5      FALSE 6.752e+01 8.523e-05   6
-## 10          Justin Pierce    5      FALSE 1.599e+01 8.411e-05   6
-## 14           Amanda Smith    5      FALSE 2.573e+02 8.525e-05   8
-## 23         Melissa Holmes    5      FALSE 7.848e+00 8.404e-05   7
-## 96             Ryan Alice    5      FALSE 6.632e+01 8.533e-05   8
-## 222         Thomas Gehrke    5      FALSE 3.470e+00 8.396e-05   7
-## 236         Kellie Kutkey    5      FALSE 8.845e+00 8.391e-05   5
-## 18          James Wallace    6       TRUE 2.006e+03 8.572e-05   7
-## 12         Theresa Nguyen    6      FALSE 2.941e+02 8.454e-05   2
-## 27        Julie Bergstrom    6      FALSE 3.333e-01 8.335e-05   4
-## 65             Annette Vu    6      FALSE 6.533e+00 8.230e-05   2
-## 80        Natalie Jacuzzi    6      FALSE 0.000e+00 8.453e-05   2
-## 129        Carter Wallace    6      FALSE 0.000e+00 8.334e-05   3
-## 138          Diane Doctor    6      FALSE 0.000e+00 8.453e-05   2
-## 148            Todd Bates    6      FALSE 0.000e+00 8.110e-05   2
-## 199            Katy Smith    6      FALSE 2.177e+02 8.338e-05   7
-## 241             Nancy Lee    6      FALSE 1.935e+03 8.696e-05   6
-## 263           Patty Lewis    6      FALSE 7.567e+00 8.338e-05   4
-## 277           Marie Bates    6      FALSE 1.672e+02 8.335e-05   5
-## 282          Kim Peterson    6      FALSE 0.000e+00 8.453e-05   2
-## 295        Miranda Pappas    6      FALSE 7.614e+01 8.461e-05   6
-## 21             Bekah Wolf    7       TRUE 2.299e+03 9.027e-05  23
-## 331         Henry Barrera    7       TRUE 3.160e+03 8.971e-05   9
-## 17          Donnie Drobny    7      FALSE 1.795e+02 8.923e-05  15
-## 25          Nikki O'Brien    7      FALSE 8.455e-01 8.783e-05  12
-## 40          Heather Wiese    7      FALSE 3.526e+01 8.903e-05   4
-## 49          Carrie Yerton    7      FALSE 1.865e+03 8.885e-05  18
-## 57          Chris Frazier    7      FALSE 4.471e-01 8.780e-05   8
-## 69       Nicholas Burnett    7      FALSE 0.000e+00 8.721e-05   4
-## 75       Jeffrey Prescott    7      FALSE 1.911e+00 8.828e-05  12
-## 105           Nathan Enns    7      FALSE 6.907e+02 8.933e-05  22
-## 110             Greg Pugh    7      FALSE 2.184e+02 8.920e-05  17
-## 123      Kimberly Livesay    7      FALSE 6.003e+02 8.905e-05  19
-## 139      Samantha Johnson    7      FALSE 1.361e+02 8.843e-05  11
-## 143           Amy McBride    7      FALSE 1.466e+01 8.835e-05  14
-## 161         Mike Klausman    7      FALSE 5.404e+02 8.933e-05  23
-## 194           Micah Wiese    7      FALSE 1.837e+03 8.958e-05  22
-## 202       Kieffer Tarbell    7      FALSE 4.344e+02 8.934e-05  24
-## 219        Julie Hurliman    7      FALSE 1.169e+01 8.832e-05  16
-## 245         Tonia Gebhart    7      FALSE 2.381e+01 8.833e-05  18
-## 249        Debbie Tavares    7      FALSE 9.385e+01 8.840e-05  21
-## 251           Heidi Baney    7      FALSE 1.194e+03 8.864e-05  11
-## 264            Ej Lanigan    7      FALSE 4.742e+00 8.833e-05  12
-## 273         Nathan Conant    7      FALSE 2.021e+02 8.928e-05  16
-## 285        Micah Stickler    7      FALSE 7.143e-02 8.770e-05   9
-## 314            Bryan Agee    7      FALSE 0.000e+00 8.671e-05   1
-## 345           Heidi Baney    7      FALSE 6.240e+01 8.864e-05   7
-## 350       Jennifer Waters    7      FALSE 2.739e+01 8.830e-05  14
-## 61            Cat Buckley    8       TRUE 1.460e+04 9.136e-05  34
-## 19           Alex Asselin    8      FALSE 2.102e+03 9.045e-05   4
-## 37         Kelly McCarthy    8      FALSE 0.000e+00 8.864e-05   3
-## 88         Mark Hernandez    8      FALSE 2.965e+02 8.935e-05   3
-## 89          Aaron Buckley    8      FALSE 5.682e+01 8.925e-05   8
-## 147         Heather Sutch    8      FALSE 0.000e+00 8.862e-05   1
-## 167     Elizabeth Buckley    8      FALSE 4.084e+01 8.925e-05   7
-## 218          Conn Buckley    8      FALSE 2.670e+01 8.924e-05   6
-## 229        Jackie Kersten    8      FALSE 1.513e+03 9.023e-05   5
-## 268             Lea Davis    8      FALSE 5.000e-01 8.866e-05   6
-## 330            Kelly Anne    8      FALSE 0.000e+00 8.862e-05   1
-## 359       Setsuko Buckley    8      FALSE 0.000e+00 8.865e-05   5
-## 360         Yumin Buckley    8      FALSE 0.000e+00 8.865e-05   5
-## 189           Allison Cox    9       TRUE 3.609e+03 8.953e-05  10
-## 28          Carolina Main    9      FALSE 1.341e+03 8.699e-05   5
-## 32            Linda Jones    9      FALSE 0.000e+00 8.535e-05   1
-## 64       Elissa Kevrekian    9      FALSE 1.734e+03 8.890e-05   4
-## 76           Reniera Eddy    9      FALSE 3.979e+02 8.788e-05   5
-## 97             Dan Lankow    9      FALSE 5.000e-01 8.692e-05   3
-## 157             Eric Main    9      FALSE 0.000e+00 8.695e-05   3
-## 180       Skye Macalester    9      FALSE 0.000e+00 8.694e-05   2
-## 190           Michael Cox    9      FALSE 4.257e+02 8.792e-05   6
-## 204           James Unkow    9      FALSE 0.000e+00 8.691e-05   2
-## 328             Cory Eddy    9      FALSE 0.000e+00 8.692e-05   2
-## 166         Annie Bencomo   10       TRUE 7.904e+03 9.166e-05  20
-## 197    Christopher Barker   10       TRUE 3.654e+03 9.069e-05  33
-## 34       Giovanni Bencomo   10      FALSE 8.294e+02 9.026e-05  11
-## 35           Rick Rezinas   10      FALSE 5.656e+02 9.020e-05  10
-## 52       Stephanie Bolson   10      FALSE 2.400e+01 9.007e-05   8
-## 54         Keely Phillips   10      FALSE 0.000e+00 8.936e-05   4
-## 59           Eric Virshbo   10      FALSE 1.590e+00 8.787e-05   5
-## 84          Melissa Hovis   10      FALSE 3.004e+01 8.881e-05  10
-## 85             Amy Harris   10      FALSE 8.961e+02 9.033e-05  26
-## 92          Dustin Harris   10      FALSE 6.407e+02 9.028e-05  21
-## 93         Alicia Fuentes   10      FALSE 6.073e+02 8.902e-05  16
-## 100          Susan Kucera   10      FALSE 4.538e+00 8.859e-05   7
-## 103         Dave Horspool   10      FALSE 0.000e+00 8.922e-05   4
-## 109        Thomas O'Leary   10      FALSE 6.477e-01 8.821e-05   6
-## 112          Lisa Bafetti   10      FALSE 0.000e+00 8.807e-05   3
-## 121       Debbie Ginzburg   10      FALSE 9.733e+00 8.839e-05   6
-## 128         Rebecca Waltz   10      FALSE 1.819e+03 9.065e-05  26
-## 131        Rachel Prewitt   10      FALSE 6.073e+02 8.990e-05  11
-## 136         Nedra Rezinas   10      FALSE 1.266e+03 9.032e-05  14
-## 137          Brent Harris   10      FALSE 7.870e-01 8.854e-05   6
-## 140       Marne Manoukian   10      FALSE 6.135e+02 8.998e-05   6
-## 162             Amara Zee   10      FALSE 2.288e+01 8.903e-05  10
-## 165        Michael Mouton   10      FALSE 4.788e+00 8.851e-05   8
-## 177          Johnny Buell   10      FALSE 2.810e+03 9.036e-05  21
-## 200            Jason Post   10      FALSE 2.267e+00 8.894e-05   5
-## 238           Tracy Meese   10      FALSE 0.000e+00 8.927e-05   4
-## 253            Mike Smith   10      FALSE 0.000e+00 8.807e-05   2
-## 254             Matt Love   10      FALSE 8.771e+02 8.922e-05  21
-## 256           Laura Davis   10      FALSE 9.012e-01 8.846e-05   7
-## 260            Sher Sinda   10      FALSE 2.000e-01 8.843e-05   6
-## 269          John Stevens   10      FALSE 2.714e-01 8.852e-05   5
-## 315           Sean Politz   10      FALSE 1.616e+02 9.010e-05  11
-## 320          David Dvorak   10      FALSE 8.813e+02 8.990e-05  15
-## 339           Sarah Dyste   10      FALSE 1.250e-01 8.852e-05   5
-## 357         Chanda Gandhi   10      FALSE 1.248e+01 8.851e-05   8
-## 87         Lucia Longoria   11       TRUE 4.275e+03 8.943e-05  16
-## 41      Richmond Fontaine   11      FALSE 0.000e+00 8.695e-05   6
-## 86           Tineke Malus   11      FALSE 4.606e+02 8.774e-05   4
-## 91             Angie Burr   11      FALSE 0.000e+00 8.686e-05   2
-## 111            Cheryl Ann   11      FALSE 5.630e+00 8.750e-05   5
-## 126            Matt Moore   11      FALSE 1.944e+02 8.780e-05  13
-## 168        Kristen Broyer   11      FALSE 7.648e+01 8.807e-05   9
-## 214    Fernando Viciconte   11      FALSE 2.385e+03 8.809e-05  10
-## 243    Pixelface Creative   11      FALSE 6.334e+01 8.746e-05   5
-## 272        Jolene Kawecki   11      FALSE 1.045e+01 8.755e-05   7
-## 279           Megan Brown   11      FALSE 1.636e+01 8.756e-05   8
-## 281        Stacy Benjamin   11      FALSE 1.667e-01 8.696e-05   7
-## 108           Julie Honse   12       TRUE 2.928e+03 9.065e-05  12
-## 149        Heather Fowler   12       TRUE 1.252e+04 9.102e-05   4
-## 160            Dawn Jones   12       TRUE 1.454e+03 8.900e-05   2
-## 221       Sandy Bacharach   12       TRUE 2.841e+03 9.074e-05   7
-## 244           Ann Wallace   12       TRUE 1.839e+03 9.024e-05   8
-## 2           David Allamon   12      FALSE 0.000e+00 8.757e-05   2
-## 4              Carla Owen   12      FALSE 0.000e+00 8.751e-05   4
-## 11          Naomi Fishman   12      FALSE 3.380e+02 8.222e-05   3
-## 26          Erica Allison   12      FALSE 0.000e+00 7.445e-06   0
-## 33              Tina Slee   12      FALSE 0.000e+00 8.512e-05   1
-## 38       Makiko Yamashita   12      FALSE 3.380e+02 8.764e-05   2
-## 39             Amy Begley   12      FALSE 5.073e+00 8.899e-05   7
-## 42               Nic Lamb   12      FALSE 0.000e+00 8.804e-05   1
-## 45      Michael Samarelli   12      FALSE 3.406e+02 8.821e-05  10
-## 46       Gary Blessington   12      FALSE 1.598e+02 9.020e-05   7
-## 47           Orna Izakson   12      FALSE 7.321e+02 8.768e-05   4
-## 48         Elizabeth Cole   12      FALSE 0.000e+00 8.800e-05   1
-## 55          Shawn Mullaly   12      FALSE 0.000e+00 8.678e-05   1
-## 62         Caroline Kobin   12      FALSE 4.144e+02 9.038e-05   4
-## 70      Vincent Granville   12      FALSE 0.000e+00 7.465e-06   1
-## 71             Jack Cheng   12      FALSE 0.000e+00 8.565e-05   1
-## 81             Mark Novak   12      FALSE 3.782e+01 8.830e-05   4
-## 90          Kate Horspool   12      FALSE 3.232e+02 9.030e-05   6
-## 99              Ann Visan   12      FALSE 0.000e+00 7.465e-06   1
-## 102          Susan Kelley   12      FALSE 9.225e+02 9.011e-05   7
-## 115           Keith Parks   12      FALSE 0.000e+00 8.756e-05   4
-## 116          Nicole Busto   12      FALSE 0.000e+00 7.999e-05   1
-## 119          Julie Fukuda   12      FALSE 0.000e+00 7.465e-06   1
-## 120         Ramona DeNies   12      FALSE 0.000e+00 7.445e-06   0
-## 132     Kristen Backeberg   12      FALSE 6.879e+01 8.997e-05   5
-## 134           Aviva Brown   12      FALSE 0.000e+00 8.516e-05   1
-## 135     Urko Larrakoetxea   12      FALSE 0.000e+00 7.465e-06   1
-## 141 Karinna Jones-Ianello   12      FALSE 1.758e+01 8.925e-05   4
-## 146          Jenny Nicole   12      FALSE 0.000e+00 8.775e-05   2
-## 151        Melissa Powell   12      FALSE 0.000e+00 8.221e-05   2
-## 155         Nicole Curcio   12      FALSE 0.000e+00 7.445e-06   0
-## 158            Ali Jessie   12      FALSE 1.283e+02 8.900e-05   4
-## 169            Esther Lai   12      FALSE 0.000e+00 7.506e-06   2
-## 178          April Brewer   12      FALSE 0.000e+00 7.445e-06   0
-## 179          Joshua Marks   12      FALSE 2.824e+01 8.906e-05   9
-## 186   Elizabeth Rollerson   12      FALSE 3.060e+02 8.981e-05   7
-## 192          Lance Adkins   12      FALSE 0.000e+00 7.445e-06   0
-## 196     Holly Fraser-Witt   12      FALSE 6.879e+01 8.997e-05   5
-## 198          Mandy Wilson   12      FALSE 1.185e+03 9.079e-05   5
-## 206             Lisa Kith   12      FALSE 0.000e+00 7.506e-06   2
-## 209          Lucien Kress   12      FALSE 0.000e+00 7.465e-06   1
-## 215              Kyle Pak   12      FALSE 2.000e+00 7.506e-06   3
-## 217       Sean Kilpatrick   12      FALSE 0.000e+00 7.445e-06   0
-## 220             David Yan   12      FALSE 0.000e+00 7.506e-06   1
-## 225           Nancy Innis   12      FALSE 0.000e+00 8.836e-05   4
-## 230            Kush Patel   12      FALSE 0.000e+00 7.465e-06   1
-## 232        David Dranchak   12      FALSE 0.000e+00 7.445e-06   0
-## 240          Joe Ferguson   12      FALSE 0.000e+00 8.783e-05   4
-## 261           Jenna Jones   12      FALSE 3.395e+02 8.338e-05   4
-## 265      Anthony Petrarca   12      FALSE 0.000e+00 7.465e-06   1
-## 276        Frances Favela   12      FALSE 1.008e+03 8.455e-05   3
-## 278        Patrick Romano   12      FALSE 0.000e+00 7.445e-06   0
-## 280    Justine Vanderpool   12      FALSE 0.000e+00 8.109e-05   1
-## 283           Eric Barten   12      FALSE 3.051e-01 8.880e-05   4
-## 296          Ryan Parrett   12      FALSE 0.000e+00 7.445e-06   0
-## 298         Katie Lessner   12      FALSE 0.000e+00 7.465e-06   1
-## 299       John Liebeskind   12      FALSE 1.816e+00 8.883e-05   8
-## 301         Mario Delgado   12      FALSE 0.000e+00 7.445e-06   0
-## 306        Lindsey Barber   12      FALSE 0.000e+00 8.488e-05   1
-## 309           Pete Savage   12      FALSE 3.039e+01 8.909e-05   8
-## 323         Chris Fanning   12      FALSE 0.000e+00 7.445e-06   0
-## 335         Lauren Weigel   12      FALSE 0.000e+00 8.325e-05   1
-## 349          Lance Carion   12      FALSE 0.000e+00 7.445e-06   0
-## 352           Jennifer Ha   12      FALSE 0.000e+00 7.445e-06   0
-## 354              Irina St   12      FALSE 0.000e+00 7.445e-06   0
-## 358         Oscar Sanchez   12      FALSE 0.000e+00 7.445e-06   0
-## 361          Rebekah Chou   12      FALSE 1.724e+01 8.913e-05   4
+## 30            Judy Kroone    1       TRUE 1.271e+03 8.443e-05  17
+## 1        Christopher Chan    1      FALSE 6.521e+00 8.214e-05  13
+## 3                 Kati Wu    1      FALSE 7.949e-01 8.214e-05  13
+## 16              Eric Chan    1      FALSE 2.652e+00 8.216e-05  16
+## 17             Derek Chan    1      FALSE 2.652e+00 8.216e-05  16
+## 23    é³ä¸æº é³ä¸æº    1      FALSE 1.590e+00 8.214e-05  14
+## 45               Jason Wu    1      FALSE 1.868e+00 8.215e-05  15
+## 93             Jeannie Wu    1      FALSE 3.929e-01 8.212e-05  11
+## 97            Kiyomi Ueno    1      FALSE 1.111e+00 8.214e-05  13
+## 103          Jocelyn Chan    1      FALSE 9.417e+02 8.442e-05  15
+## 111              Vania Ng    1      FALSE 3.020e-01 8.212e-05  11
+## 116            Chris Sing    1      FALSE 3.020e-01 8.212e-05  11
+## 143             Carter Ng    1      FALSE 2.652e+00 8.216e-05  16
+## 151             Anna Liao    1      FALSE 1.115e+03 8.443e-05  17
+## 178            Brian Chan    1      FALSE 2.000e-01 8.212e-05  10
+## 271               Amy Lim    1      FALSE 6.560e+01 8.433e-05   3
+## 279          Mable Cheung    1      FALSE 8.867e+02 8.441e-05  14
+## 322              Karen Ng    1      FALSE 4.068e-01 8.212e-05  10
+## 106          Marc Frommer    2       TRUE 1.211e+03 8.562e-05  33
+## 264            Roger Chou    2       TRUE 9.850e+02 8.554e-05  24
+## 5           Kevin Douglas    2      FALSE 3.862e+01 8.488e-05  25
+## 25          Craig Dickson    2      FALSE 9.431e+01 8.495e-05  31
+## 46      Michael Samarelli    2      FALSE 3.468e+02 8.400e-05  11
+## 112           Kathy Klass    2      FALSE 6.370e-01 8.365e-05  12
+## 133         Juli Danielle    2      FALSE 2.210e+01 8.479e-05  16
+## 146         Steve Walters    2      FALSE 4.846e+02 8.511e-05  46
+## 165    Christopher Warren    2      FALSE 8.893e+02 8.544e-05  28
+## 166            Steven Yee    2      FALSE 9.309e+01 8.473e-05  28
+## 183             May Cheng    2      FALSE 5.176e-01 8.361e-05  10
+## 184            Matt Hagen    2      FALSE 1.982e+02 8.503e-05  38
+## 190          Donald Mukai    2      FALSE 2.607e+00 8.454e-05  11
+## 210            Andy Fritz    2      FALSE 1.374e+01 8.461e-05  19
+## 215            Bob Martin    2      FALSE 1.027e+01 8.376e-05  20
+## 216          Roger Michel    2      FALSE 2.879e+01 8.475e-05  22
+## 219             Dave Mari    2      FALSE 2.498e+01 8.460e-05  17
+## 227       Patti Krebsbach    2      FALSE 4.814e+01 8.468e-05  25
+## 231           Eric Barnes    2      FALSE 1.626e+02 8.496e-05  37
+## 239         David Spooner    2      FALSE 2.343e+00 8.394e-05  14
+## 246      Terry Sentinella    2      FALSE 3.831e+02 8.503e-05  44
+## 258         Ginger Gruber    2      FALSE 1.071e+01 8.400e-05  21
+## 275           Alvin Crain    2      FALSE 1.109e+02 8.493e-05  32
+## 280              Van Phan    2      FALSE 4.584e+01 8.488e-05  28
+## 296      Shannon Willford    2      FALSE 1.053e+01 8.406e-05  15
+## 298            Russ Smith    2      FALSE 2.251e+00 8.394e-05  14
+## 311          Bill Barmore    2      FALSE 4.954e+00 8.403e-05  16
+## 358             Lisa Wood    2      FALSE 2.419e+01 8.470e-05  19
+## 371          Stevie Lopez    2      FALSE 8.062e+01 8.491e-05  26
+## 62            Cat Buckley    3       TRUE 1.491e+04 8.674e-05  35
+## 6              Ben Aldred    3      FALSE 0.000e+00 8.423e-05   2
+## 20           Alex Asselin    3      FALSE 2.242e+03 8.595e-05   4
+## 38         Kelly McCarthy    3      FALSE 0.000e+00 8.424e-05   3
+## 87         Mark Hernandez    3      FALSE 3.257e+02 8.492e-05   3
+## 88          Aaron Buckley    3      FALSE 5.914e+01 8.485e-05   8
+## 148         Heather Sutch    3      FALSE 0.000e+00 8.422e-05   1
+## 169     Elizabeth Buckley    3      FALSE 4.258e+01 8.485e-05   7
+## 221          Conn Buckley    3      FALSE 4.916e+01 8.485e-05   7
+## 232        Jackie Kersten    3      FALSE 1.600e+03 8.578e-05   5
+## 273             Lea Davis    3      FALSE 5.000e-01 8.426e-05   6
+## 335            Kelly Anne    3      FALSE 0.000e+00 8.422e-05   1
+## 365       Setsuko Buckley    3      FALSE 0.000e+00 8.425e-05   5
+## 366         Yumin Buckley    3      FALSE 0.000e+00 8.425e-05   5
+## 7          Jeff Waskowiak    4       TRUE 3.214e+03 8.561e-05  30
+## 61         Yassine Diboun    4       TRUE 4.226e+03 8.686e-05  93
+## 82       Marc Baumgartner    4       TRUE 8.019e+03 8.619e-05  32
+## 173       Glenn Tachiyama    4       TRUE 2.297e+03 8.592e-05  75
+## 185       Gregory Gourdet    4       TRUE 3.004e+03 8.620e-05  37
+## 243         Darin Swanson    4       TRUE 2.091e+03 8.529e-05  22
+## 9             Jason Leman    4      FALSE 9.600e+02 8.604e-05  72
+## 14           David Herron    4      FALSE 9.910e+00 8.526e-05  14
+## 21           Ben Blessing    4      FALSE 4.908e+01 8.496e-05  23
+## 32              Dana Katz    4      FALSE 2.138e+01 8.483e-05  40
+## 37         Willie McBride    4      FALSE 1.170e+03 8.642e-05  65
+## 52           Gary Robbins    4      FALSE 4.635e+02 8.511e-05  25
+## 54          Desiree Marek    4      FALSE 3.189e+02 8.581e-05  51
+## 57       Alessandra Novak    4      FALSE 6.700e+02 8.499e-05  21
+## 64         Jocelyn Nelson    4      FALSE 1.061e+02 8.566e-05  31
+## 67          Rhiannon Wood    4      FALSE 3.936e+00 8.470e-05  24
+## 68            Jeremy Hurl    4      FALSE 4.440e+00 8.481e-05  25
+## 72           Marta Fisher    4      FALSE 1.378e+01 8.484e-05  34
+## 78             Neil Baker    4      FALSE 2.911e+01 8.511e-05  22
+## 100             Mac Smith    4      FALSE 1.100e+01 8.473e-05  15
+## 105          Christine An    4      FALSE 9.291e+01 8.508e-05  13
+## 115         Sarah Bradham    4      FALSE 2.151e+02 8.592e-05  43
+## 118         Jason Fedchak    4      FALSE 0.000e+00 8.448e-05   8
+## 121            Sarah Shea    4      FALSE 1.397e+01 8.418e-05   7
+## 123        Jennifer Allen    4      FALSE 9.087e+01 8.551e-05  27
+## 124           Mary Ramsay    4      FALSE 1.896e+01 8.496e-05  25
+## 126         Cheri Redwine    4      FALSE 4.177e+02 8.524e-05  55
+## 129         Sean Meissner    4      FALSE 6.596e+02 8.545e-05  55
+## 130            Kevin Karr    4      FALSE 6.684e+02 8.612e-05  59
+## 134              Sara Lee    4      FALSE 2.623e+01 8.501e-05  29
+## 145 Andrea Jarzombek-Holt    4      FALSE 2.517e+02 8.606e-05  52
+## 154             T.J. Ford    4      FALSE 6.740e+02 8.593e-05  55
+## 156             Olga King    4      FALSE 8.093e-01 8.435e-05   8
+## 158         Leslie Gerein    4      FALSE 9.801e-01 8.387e-05   9
+## 161       Heather McGrath    4      FALSE 4.180e+02 8.587e-05  37
+## 172      Charles Replogle    4      FALSE 1.165e+03 8.624e-05  67
+## 174        Diana Bartolus    4      FALSE 1.856e+02 8.530e-05  27
+## 176           Renee Seker    4      FALSE 5.488e+02 8.635e-05  56
+## 181          Joshua Marks    4      FALSE 2.481e+01 8.480e-05  10
+## 186          Joel Dippold    4      FALSE 1.370e+03 8.583e-05  13
+## 187         Leif Rustvold    4      FALSE 1.422e+00 8.472e-05   9
+## 196          Sarah Duncan    4      FALSE 8.437e+02 8.610e-05  62
+## 206           Paul Nelson    4      FALSE 6.199e+02 8.618e-05  66
+## 208    Katie Christianson    4      FALSE 1.665e+02 8.563e-05  53
+## 213            Hugh Davis    4      FALSE 1.191e+02 8.554e-05  41
+## 214          Gregg Webber    4      FALSE 5.044e+01 8.501e-05  13
+## 226         Robert Orcutt    4      FALSE 4.006e+01 8.473e-05  15
+## 228           Nancy Innis    4      FALSE 0.000e+00 8.422e-05   5
+## 229            Mike Davis    4      FALSE 3.197e+02 8.595e-05  51
+## 230          Julie Thomas    4      FALSE 4.393e+02 8.565e-05  49
+## 234         Moises Lucero    4      FALSE 1.664e+03 8.581e-05  21
+## 237             Josh Owen    4      FALSE 5.224e+01 8.490e-05  22
+## 238             Jesse Cox    4      FALSE 6.946e+00 8.496e-05  21
+## 241            Matt Helms    4      FALSE 9.668e+01 8.565e-05  44
+## 252          Angela Drake    4      FALSE 1.318e-01 8.447e-05   9
+## 253         Nathan Herzog    4      FALSE 6.164e+01 8.478e-05  15
+## 261        Jeannie Horton    4      FALSE 1.336e+03 8.593e-05  46
+## 265     Ronda Sundermeier    4      FALSE 4.031e+02 8.575e-05  40
+## 268          Jeff Boggess    4      FALSE 2.662e+02 8.598e-05  51
+## 272         Samantha Vega    4      FALSE 6.353e+02 8.620e-05  60
+## 276             Pam Smith    4      FALSE 1.941e+02 8.549e-05  37
+## 291           Jim Kennedy    4      FALSE 1.188e+01 8.495e-05  35
+## 292              Syd Long    4      FALSE 9.132e+01 8.549e-05  31
+## 293          Todd Janssen    4      FALSE 1.887e+03 8.666e-05  78
+## 297         Brian Janecek    4      FALSE 1.606e+02 8.570e-05  43
+## 305       John Liebeskind    4      FALSE 1.603e+00 8.460e-05   9
+## 314  Anne Crispino-Taylor    4      FALSE 6.855e+02 8.598e-05  59
+## 315           Pete Savage    4      FALSE 2.398e+01 8.483e-05   9
+## 318      Trevor Hostetler    4      FALSE 4.354e+02 8.585e-05  63
+## 323         Brandon Drake    4      FALSE 3.565e+02 8.601e-05  46
+## 324         Jeff McAlpine    4      FALSE 2.573e+02 8.526e-05  32
+## 326          Silvia Reyes    4      FALSE 2.983e+01 8.531e-05  29
+## 329        Justin Huggins    4      FALSE 1.136e+01 8.492e-05  18
+## 331           Eric Lubell    4      FALSE 1.577e+02 8.558e-05  39
+## 334   Rikilynn Mclenithan    4      FALSE 4.320e+01 8.522e-05  29
+## 337         Rick Kneedler    4      FALSE 9.523e+01 8.541e-05  34
+## 342            Mike Burke    4      FALSE 4.471e+01 8.488e-05  23
+## 345         David Chilson    4      FALSE 0.000e+00 8.426e-05   6
+## 346        Ricky Bartolus    4      FALSE 1.947e-01 8.461e-05  12
+## 348        Larry Stephens    4      FALSE 4.323e+02 8.610e-05  56
+## 356           Megan Bruce    4      FALSE 4.202e+01 8.512e-05  38
+## 360           Scott Dumdi    4      FALSE 2.429e+00 8.477e-05  21
+## 361            Moe Codino    4      FALSE 1.448e+02 8.553e-05  54
+## 362        Juliano Wilson    4      FALSE 2.101e-01 8.462e-05   8
+## 368        Dennis Gamroth    4      FALSE 1.033e+01 8.456e-05  14
+## 369         Jennifer Love    4      FALSE 4.757e+02 8.615e-05  62
+## 370        Keith Shishido    4      FALSE 1.604e+01 8.487e-05  18
+## 373         Avery McCombs    4      FALSE 3.145e+01 8.471e-05  16
+## 8      Colleen Schoonover    5       TRUE 1.067e+03 8.338e-05  19
+## 299          Evan Freeman    5       TRUE 1.093e+04 8.488e-05  21
+## 316        Erin Thekkedom    5       TRUE 2.134e+03 8.304e-05   8
+## 332        Marcus Fischer    5       TRUE 1.771e+03 8.337e-05  19
+## 31             Justin Kim    5      FALSE 2.439e+01 8.157e-05  13
+## 44          Ashlyn Jaswal    5      FALSE 1.588e+00 8.078e-05   4
+## 51      Ankit Upadhyayula    5      FALSE 6.213e+02 8.331e-05  29
+## 59              Kim Huynh    5      FALSE 5.995e+02 8.335e-05  28
+## 73              Victor So    5      FALSE 3.120e+01 8.132e-05  24
+## 74        Dakota McMillan    5      FALSE 2.082e+02 8.157e-05  27
+## 77           Jon Anderson    5      FALSE 3.643e+02 8.324e-05  23
+## 79           Donovan Tran    5      FALSE 4.709e+02 8.304e-05  24
+## 83      Kellyn Christison    5      FALSE 5.377e+02 8.207e-05  10
+## 94           Megan Baxter    5      FALSE 6.110e+02 8.333e-05  14
+## 153             Grace Xia    5      FALSE 2.333e+02 8.299e-05  22
+## 155         Christina Hsu    5      FALSE 5.084e+02 8.326e-05  24
+## 175            Bre Ongley    5      FALSE 6.259e+01 8.145e-05  15
+## 177       Kyle Yasumiishi    5      FALSE 3.703e+01 8.163e-05  21
+## 189            Cathy Dinh    5      FALSE 3.155e+02 8.122e-05  11
+## 193           Danny Cohen    5      FALSE 1.051e+03 8.337e-05  31
+## 198         Ydali Olivera    5      FALSE 1.121e+01 8.151e-05   9
+## 204         Sean Morrison    5      FALSE 2.852e+01 8.127e-05   3
+## 211          Nicki Parker    5      FALSE 4.702e+02 8.290e-05  12
+## 254         Jordan Brazda    5      FALSE 2.130e+02 8.315e-05  10
+## 256              Eric Kim    5      FALSE 1.509e+02 8.185e-05  24
+## 263        Paige Singhose    5      FALSE 3.871e+02 8.321e-05  17
+## 289           Briana Chui    5      FALSE 1.019e+02 8.109e-05   4
+## 294          Nick Cropley    5      FALSE 6.510e+02 8.308e-05  26
+## 295    Megan Schermerhorn    5      FALSE 2.515e+02 8.302e-05  22
+## 300          Nick Hartley    5      FALSE 1.468e+00 8.111e-05   5
+## 303        Allison Rogers    5      FALSE 6.650e+01 8.177e-05  17
+## 306       DjBlast Sanchez    5      FALSE 2.456e+02 8.297e-05  12
+## 308      Mindy Kirschbaum    5      FALSE 6.148e+02 8.147e-05   7
+## 309          Jordan LeBle    5      FALSE 4.082e+01 8.289e-05  11
+## 310             Will Kent    5      FALSE 1.563e+01 8.129e-05  19
+## 313        Brian Grimsted    5      FALSE 5.882e-02 8.127e-05   4
+## 317          Garrett Mann    5      FALSE 5.091e+01 8.153e-05  11
+## 321           Brady Ogden    5      FALSE 1.743e+02 8.294e-05  11
+## 327          Carly DeLapp    5      FALSE 3.594e+02 8.315e-05  17
+## 330          Kyle Shorter    5      FALSE 5.147e+00 8.149e-05   7
+## 338           Marcus Kwon    5      FALSE 4.657e+00 8.118e-05   8
+## 339             Eryn Sych    5      FALSE 4.290e+01 8.163e-05  20
+## 341         Vlad Shapoval    5      FALSE 3.628e+02 8.304e-05  24
+## 343         Kaitie DoupÃ©    5      FALSE 2.831e+02 8.317e-05  15
+## 347        McKenna Spieth    5      FALSE 1.324e+02 8.155e-05  25
+## 349       Lauren Marshall    5      FALSE 4.156e+01 8.120e-05   9
+## 351         Sierra Monaco    5      FALSE 8.768e+01 8.266e-05   5
+## 352        Connor Brennan    5      FALSE 1.093e+00 8.117e-05   8
+## 353         Shane Brennan    5      FALSE 8.831e+00 8.131e-05  21
+## 372          Kyle Shorter    5      FALSE 4.690e+00 8.114e-05   7
+## 194          Nadia Khater    6       TRUE 2.401e+03 8.465e-05   9
+## 10    Krystle Flerchinger    6      FALSE 1.736e+01 8.177e-05   6
+## 11          Justin Pierce    6      FALSE 3.529e+01 8.296e-05   7
+## 15           Amanda Smith    6      FALSE 1.198e+02 8.303e-05   9
+## 24         Melissa Holmes    6      FALSE 3.285e+01 8.289e-05   8
+## 95             Ryan Alice    6      FALSE 4.558e+01 8.291e-05   9
+## 225         Thomas Gehrke    6      FALSE 3.463e+01 8.281e-05   8
+## 240         Kellie Kutkey    6      FALSE 5.903e+01 8.277e-05   6
+## 19          James Wallace    7       TRUE 2.048e+03 8.155e-05   7
+## 13         Theresa Nguyen    7      FALSE 2.977e+02 8.041e-05   2
+## 28        Julie Bergstrom    7      FALSE 3.333e-01 7.937e-05   4
+## 66             Annette Vu    7      FALSE 6.533e+00 7.834e-05   2
+## 80        Natalie Jacuzzi    7      FALSE 0.000e+00 8.040e-05   2
+## 128        Carter Wallace    7      FALSE 0.000e+00 7.936e-05   3
+## 139          Diane Doctor    7      FALSE 0.000e+00 8.040e-05   2
+## 149            Todd Bates    7      FALSE 0.000e+00 7.729e-05   2
+## 202            Katy Smith    7      FALSE 2.231e+02 7.939e-05   7
+## 245             Nancy Lee    7      FALSE 1.964e+03 8.263e-05   6
+## 269           Patty Lewis    7      FALSE 7.567e+00 7.939e-05   4
+## 282           Marie Bates    7      FALSE 1.702e+02 7.937e-05   5
+## 287          Kim Peterson    7      FALSE 0.000e+00 8.040e-05   2
+## 301        Miranda Pappas    7      FALSE 7.482e+01 8.047e-05   6
+## 22             Bekah Wolf    8       TRUE 1.995e+03 8.572e-05  22
+## 336         Henry Barrera    8       TRUE 3.096e+03 8.527e-05   9
+## 18          Donnie Drobny    8      FALSE 1.525e+02 8.480e-05  15
+## 26          Nikki O'Brien    8      FALSE 5.380e-01 8.347e-05  11
+## 41          Heather Wiese    8      FALSE 0.000e+00 8.457e-05   3
+## 50          Carrie Yerton    8      FALSE 1.283e+03 8.442e-05  18
+## 58          Chris Frazier    8      FALSE 4.471e-01 8.345e-05   8
+## 69       Nicholas Burnett    8      FALSE 0.000e+00 8.293e-05   4
+## 75       Jeffrey Prescott    8      FALSE 1.757e+01 8.390e-05  13
+## 104           Nathan Enns    8      FALSE 6.506e+02 8.488e-05  21
+## 109             Greg Pugh    8      FALSE 2.110e+02 8.477e-05  17
+## 122      Kimberly Livesay    8      FALSE 6.121e+02 8.470e-05  19
+## 140      Samantha Johnson    8      FALSE 1.298e+02 8.402e-05  10
+## 144           Amy McBride    8      FALSE 1.477e+01 8.396e-05  14
+## 163         Mike Klausman    8      FALSE 6.512e+02 8.489e-05  23
+## 197           Micah Wiese    8      FALSE 1.558e+03 8.507e-05  21
+## 205       Kieffer Tarbell    8      FALSE 3.440e+02 8.488e-05  22
+## 222        Julie Hurliman    8      FALSE 3.103e+01 8.393e-05  17
+## 251         Tonia Gebhart    8      FALSE 2.261e+01 8.393e-05  17
+## 255        Debbie Tavares    8      FALSE 9.021e+01 8.400e-05  20
+## 257           Heidi Baney    8      FALSE 7.847e+02 8.422e-05  11
+## 278         Nathan Conant    8      FALSE 1.672e+02 8.483e-05  15
+## 290        Micah Stickler    8      FALSE 7.692e-02 8.336e-05   9
+## 319            Bryan Agee    8      FALSE 0.000e+00 8.247e-05   1
+## 350           Heidi Baney    8      FALSE 6.534e+01 8.425e-05   7
+## 355       Jennifer Waters    8      FALSE 3.895e+01 8.392e-05  15
+## 374           Heidi Baney    8      FALSE 1.873e+02 8.369e-05   7
+## 191           Allison Cox    9       TRUE 3.897e+03 8.511e-05  10
+## 29          Carolina Main    9      FALSE 1.701e+03 8.278e-05   5
+## 33            Linda Jones    9      FALSE 0.000e+00 8.128e-05   1
+## 65       Elissa Kevrekian    9      FALSE 1.938e+03 8.457e-05   4
+## 76           Reniera Eddy    9      FALSE 4.068e+02 8.362e-05   5
+## 96             Dan Lankow    9      FALSE 5.000e-01 8.271e-05   3
+## 159             Eric Main    9      FALSE 0.000e+00 8.274e-05   3
+## 182       Skye Macalester    9      FALSE 0.000e+00 8.273e-05   2
+## 192           Michael Cox    9      FALSE 5.102e+02 8.366e-05   6
+## 207     James Kalashnikov    9      FALSE 0.000e+00 8.270e-05   2
+## 333             Cory Eddy    9      FALSE 0.000e+00 8.271e-05   2
+## 107           Julie Honse   10       TRUE 3.714e+03 8.648e-05  13
+## 150        Heather Fowler   10       TRUE 1.389e+04 8.657e-05   5
+## 168         Annie Bencomo   10       TRUE 8.748e+03 8.715e-05  20
+## 35       Giovanni Bencomo   10      FALSE 8.581e+02 8.594e-05  11
+## 36           Rick Rezinas   10      FALSE 5.461e+02 8.571e-05  10
+## 47       Gary Blessington   10      FALSE 1.534e+02 8.581e-05   7
+## 53       Stephanie Bolson   10      FALSE 2.727e+01 8.563e-05   8
+## 55         Keely Phillips   10      FALSE 0.000e+00 8.499e-05   4
+## 60           Eric Virshbo   10      FALSE 1.076e+00 8.353e-05   5
+## 84          Melissa Hovis   10      FALSE 2.927e+01 8.443e-05  10
+## 85             Amy Harris   10      FALSE 8.163e+02 8.584e-05  25
+## 89          Kate Horspool   10      FALSE 3.550e+02 8.599e-05   6
+## 91          Dustin Harris   10      FALSE 6.232e+02 8.580e-05  21
+## 92         Alicia Fuentes   10      FALSE 3.324e+02 8.456e-05  15
+## 99           Susan Kucera   10      FALSE 4.954e+00 8.434e-05   7
+## 102         Dave Horspool   10      FALSE 0.000e+00 8.488e-05   4
+## 108        Thomas O'Leary   10      FALSE 2.917e-01 8.384e-05   6
+## 120       Debbie Ginzburg   10      FALSE 9.723e+00 8.406e-05   6
+## 127         Rebecca Waltz   10      FALSE 2.129e+03 8.634e-05  26
+## 131        Rachel Prewitt   10      FALSE 7.648e+02 8.568e-05  11
+## 137         Nedra Rezinas   10      FALSE 1.249e+03 8.579e-05  14
+## 138          Brent Harris   10      FALSE 3.704e-01 8.417e-05   6
+## 164             Amara Zee   10      FALSE 2.419e+01 8.467e-05  10
+## 167        Michael Mouton   10      FALSE 4.788e+00 8.430e-05   8
+## 179          Johnny Buell   10      FALSE 2.964e+03 8.587e-05  21
+## 199     Holly Fraser-Witt   10      FALSE 7.138e+01 8.560e-05   5
+## 200    Christopher Barker   10      FALSE 3.413e+03 8.616e-05  32
+## 203            Jason Post   10      FALSE 1.660e+00 8.460e-05   5
+## 242           Tracy Meese   10      FALSE 0.000e+00 8.488e-05   4
+## 259            Mike Smith   10      FALSE 0.000e+00 8.375e-05   2
+## 260             Matt Love   10      FALSE 9.098e+02 8.481e-05  20
+## 262           Laura Davis   10      FALSE 9.012e-01 8.426e-05   7
+## 266            Sher Sinda   10      FALSE 2.000e-01 8.422e-05   6
+## 274          John Stevens   10      FALSE 2.714e-01 8.431e-05   5
+## 320           Sean Politz   10      FALSE 1.580e+02 8.566e-05  11
+## 325          David Dvorak   10      FALSE 8.480e+02 8.545e-05  15
+## 344           Sarah Dyste   10      FALSE 1.250e-01 8.431e-05   5
+## 363         Chanda Gandhi   10      FALSE 4.303e+00 8.430e-05   7
+## 86         Lucia Longoria   11       TRUE 4.373e+03 8.490e-05  16
+## 42      Richmond Fontaine   11      FALSE 0.000e+00 8.258e-05   6
+## 90             Angie Burr   11      FALSE 0.000e+00 8.250e-05   2
+## 110            Cheryl Ann   11      FALSE 1.167e+01 8.313e-05   5
+## 125            Matt Moore   11      FALSE 7.592e+01 8.322e-05  12
+## 141       Marne Manoukian   11      FALSE 6.500e+02 8.544e-05   5
+## 170        Kristen Broyer   11      FALSE 8.580e+01 8.371e-05   9
+## 217    Fernando Viciconte   11      FALSE 2.454e+03 8.374e-05  10
+## 247    Pixelface Creative   11      FALSE 2.583e+00 8.257e-05   4
+## 277        Jolene Kawecki   11      FALSE 9.778e+00 8.317e-05   7
+## 284           Megan Brown   11      FALSE 1.598e+01 8.318e-05   8
+## 286        Stacy Benjamin   11      FALSE 1.667e-01 8.259e-05   7
+## 162   Dawn Jones-Redstone   12       TRUE 1.396e+03 8.455e-05   2
+## 201          Mandy Wilson   12       TRUE 1.090e+03 8.637e-05   5
+## 224       Sandy Bacharach   12       TRUE 2.744e+03 8.615e-05   7
+## 250           Ann Wallace   12       TRUE 1.723e+03 8.581e-05   8
+## 281        Frances Favela   12       TRUE 1.364e+03 8.054e-05   3
+## 2           David Allamon   12      FALSE 0.000e+00 8.493e-05   3
+## 4              Carla Owen   12      FALSE 0.000e+00 8.336e-05   5
+## 12          Naomi Fishman   12      FALSE 6.860e+02 7.840e-05   3
+## 27          Erica Allison   12      FALSE 0.000e+00 7.168e-06   0
+## 34              Tina Slee   12      FALSE 0.000e+00 8.114e-05   1
+## 39       Makiko Yamashita   12      FALSE 3.440e+02 8.347e-05   2
+## 40             Amy Begley   12      FALSE 5.135e+00 8.472e-05   7
+## 43               Nic Lamb   12      FALSE 0.000e+00 8.368e-05   1
+## 48           Orna Izakson   12      FALSE 0.000e+00 8.259e-05   3
+## 49         Elizabeth Cole   12      FALSE 0.000e+00 8.368e-05   1
+## 56          Shawn Mullaly   12      FALSE 0.000e+00 8.269e-05   1
+## 63         Caroline Kobin   12      FALSE 4.250e+02 8.598e-05   4
+## 70      Vincent Granville   12      FALSE 0.000e+00 7.188e-06   1
+## 71             Jack Cheng   12      FALSE 0.000e+00 8.164e-05   1
+## 81             Mark Novak   12      FALSE 8.184e+01 8.386e-05   5
+## 98              Ann Visan   12      FALSE 0.000e+00 7.188e-06   1
+## 101          Susan Kelley   12      FALSE 8.287e+02 8.570e-05   7
+## 113           Keith Parks   12      FALSE 0.000e+00 8.337e-05   4
+## 114          Nicole Busto   12      FALSE 3.440e+02 7.635e-05   2
+## 117          Julie Fukuda   12      FALSE 0.000e+00 7.188e-06   1
+## 119         Ramona DeNies   12      FALSE 0.000e+00 7.168e-06   0
+## 132     Kristen Backeberg   12      FALSE 1.790e+02 8.576e-05   6
+## 135           Aviva Brown   12      FALSE 0.000e+00 8.259e-05   3
+## 136     Urko Larrakoetxea   12      FALSE 0.000e+00 7.188e-06   1
+## 142 Karinna Jones-Ianello   12      FALSE 1.664e+01 8.479e-05   4
+## 147          Jenny Nicole   12      FALSE 0.000e+00 8.358e-05   2
+## 152        Melissa Powell   12      FALSE 0.000e+00 7.839e-05   2
+## 157         Nicole Curcio   12      FALSE 0.000e+00 7.168e-06   0
+## 160            Ali Jessie   12      FALSE 1.214e+02 8.455e-05   4
+## 171            Esther Lai   12      FALSE 0.000e+00 7.226e-06   2
+## 180          April Brewer   12      FALSE 0.000e+00 7.188e-06   1
+## 188   Elizabeth Rollerson   12      FALSE 3.131e+02 8.531e-05   7
+## 195          Lance Adkins   12      FALSE 0.000e+00 7.168e-06   0
+## 209             Lisa Kith   12      FALSE 0.000e+00 7.226e-06   2
+## 212          Lucien Kress   12      FALSE 0.000e+00 7.188e-06   1
+## 218              Kyle Pak   12      FALSE 2.000e+00 7.226e-06   3
+## 220       Sean Kilpatrick   12      FALSE 0.000e+00 7.168e-06   0
+## 223             David Yan   12      FALSE 0.000e+00 7.226e-06   1
+## 233            Kush Patel   12      FALSE 0.000e+00 7.188e-06   1
+## 235            Rob Coomer   12      FALSE 0.000e+00 7.188e-06   1
+## 236        David Dranchak   12      FALSE 0.000e+00 7.168e-06   0
+## 244          Joe Ferguson   12      FALSE 0.000e+00 8.441e-05   5
+## 248         Leah Williams   12      FALSE 0.000e+00 7.440e-05   1
+## 249            Todd Evans   12      FALSE 1.439e-01 8.423e-05   3
+## 267           Jenna Jones   12      FALSE 3.455e+02 7.937e-05   4
+## 270      Anthony Petrarca   12      FALSE 0.000e+00 7.188e-06   1
+## 283        Patrick Romano   12      FALSE 0.000e+00 7.168e-06   0
+## 285    Justine Vanderpool   12      FALSE 0.000e+00 7.726e-05   1
+## 288           Eric Barten   12      FALSE 2.936e-01 8.455e-05   4
+## 302          Ryan Parrett   12      FALSE 0.000e+00 7.168e-06   0
+## 304         Katie Lessner   12      FALSE 0.000e+00 7.188e-06   1
+## 307         Mario Delgado   12      FALSE 0.000e+00 7.168e-06   0
+## 312        Lindsey Barber   12      FALSE 0.000e+00 8.078e-05   1
+## 328         Chris Fanning   12      FALSE 0.000e+00 7.168e-06   0
+## 340         Lauren Weigel   12      FALSE 0.000e+00 7.925e-05   1
+## 354          Lance Carion   12      FALSE 0.000e+00 7.168e-06   0
+## 357           Jennifer Ha   12      FALSE 0.000e+00 7.168e-06   0
+## 359              Irina St   12      FALSE 0.000e+00 7.168e-06   0
+## 364         Oscar Sanchez   12      FALSE 0.000e+00 7.168e-06   0
+## 367          Rebekah Chou   12      FALSE 2.851e+01 8.485e-05   5
 ```
 
 * Community 1 is family and relatives.
@@ -736,6 +767,39 @@ D[order(D$comm, !D$isLabelled), ]
 * There are a number of key people that connect 2 or more communities.
 
 Create interactive 3-D high resolution.
+Open the `network.html` file in a browser.
+
+
+```r
+require(networkD3)
+```
+
+```
+## Loading required package: networkD3
+```
+
+```
+## Warning: package 'networkD3' was built under R version 3.1.2
+```
+
+```r
+edges <- data.frame(get.edgelist(G))
+names(edges) <- c("source", "target")
+edges$source <- edges$source - 1
+edges$target <- edges$target - 1
+edges$value <- 1
+vertices <- D[, c("name", "comm")]
+names(vertices) <- c("name", "group")
+vertices$name <- as.character(vertices$name)
+N <- forceNetwork(Links=edges, Nodes=vertices,
+                  Source="source", Target="target", Value = "value",
+                  NodeID = "name", Group="group",
+                  opacity=3/4)
+saveNetwork(N, "network.html")
+```
+
+**Don't use `rglplot`.**
+
 
 ```r
 l <- layout.fruchterman.reingold(G, dim=3)
