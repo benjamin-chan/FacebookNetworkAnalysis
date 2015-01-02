@@ -269,7 +269,7 @@ N <- forceNetwork(Links=edges, Nodes=vertices,
                   Source="source", Target="target", Value = "value",
                   NodeID = "name", Group="group",
                   opacity=3/4)
-saveNetwork(N, "network.html")
+saveNetwork(N, "index.html")
 ```
 
 **Don't use `rglplot`.**
